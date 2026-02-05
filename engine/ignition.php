@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 session_start();
 
 // Config files
@@ -19,18 +22,20 @@ spl_autoload_register(function ($class_name) {
     $file = __DIR__ . '/' . $class_name . '.php';
     if (file_exists($file)) {
         require_once $file;
+
         return true;
     }
-    
+
     // Priority 2: Check modules directory for module-based classes
     // This enables "everything is a module" philosophy (e.g., Db, future SQLite, Postgres, etc.)
     $module_name = strtolower($class_name);
     $module_file = __DIR__ . '/../modules/' . $module_name . '/' . $class_name . '.php';
     if (file_exists($module_file)) {
         require_once $module_file;
+
         return true;
     }
-    
+
     return false;
 });
 
@@ -39,7 +44,8 @@ spl_autoload_register(function ($class_name) {
  *
  * @return array Returns an associative array with 'assumed_url' and 'segments'.
  */
-function get_segments(): array {
+function get_segments(): array
+{
     // Figure out how many segments need to be ditched
     $pseudo_url = str_replace('://', '', BASE_URL);
     $pseudo_url = rtrim($pseudo_url, '/');
@@ -50,7 +56,7 @@ function get_segments(): array {
     } else {
         $num_segments_to_ditch = 0;
     }
-    $assumed_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $assumed_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $assumed_url = attempt_custom_routing($assumed_url);
     $data['assumed_url'] = $assumed_url;
     $assumed_url = str_replace('://', '', $assumed_url);
@@ -58,6 +64,7 @@ function get_segments(): array {
     $segments = explode('/', $assumed_url);
     // Remove base segments efficiently
     $data['segments'] = array_slice($segments, $num_segments_to_ditch);
+
     return $data;
 }
 
@@ -65,9 +72,11 @@ function get_segments(): array {
  * Cached custom-route matching
  *
  * @param string $url The original target URL to potentially replace.
+ *
  * @return string Returns the updated URL if a custom route match is found, otherwise returns the original URL.
  */
-function attempt_custom_routing(string $url): string {
+function attempt_custom_routing(string $url): string
+{
     static $routes = [];
     if (empty($routes)) {
         if (!defined('CUSTOM_ROUTES') || empty(CUSTOM_ROUTES)) {
@@ -77,7 +86,7 @@ function attempt_custom_routing(string $url): string {
             $regex = '#^' . strtr($pattern, [
                 '/' => '\/',
                 '(:num)' => '(\d+)',
-                '(:any)' => '([^\/]+)'
+                '(:any)' => '([^\/]+)',
             ]) . '$#';
             $routes[] = [$regex, $dest];
         }
@@ -93,14 +102,16 @@ function attempt_custom_routing(string $url): string {
             for ($i = 1; $i < $match_count; $i++) {
                 $dest = str_replace('$' . $i, $matches[$i], $dest);
             }
+
             return rtrim(BASE_URL . $dest, '/');
         }
     }
+
     return $url;
 }
 
 // Define core constants
-define('APPPATH', str_replace("\\", "/", dirname(dirname(__FILE__)) . '/'));
+define('APPPATH', str_replace('\\', '/', dirname(dirname(__FILE__)) . '/'));
 define('REQUEST_TYPE', $_SERVER['REQUEST_METHOD']);
 
 // Process URL and routing

@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Class Modules - Invokes a controller's method from a given view file.
  * Optimized for Trongate v2 performance and AI-readability.
  */
-class Modules {
-
+final class Modules
+{
     private array $modules = [];
 
     /**
@@ -13,16 +16,17 @@ class Modules {
      *
      * @param string $module_method The format is "Module/Method"
      * @param mixed $data Optional data to pass to the method
-     * @return mixed
+     *
      * @throws Exception If the format is invalid or controller/method is missing.
      */
-    public static function run(string $module_method, mixed $data = null): mixed {
+    public static function run(string $module_method, mixed $data = null): mixed
+    {
         $debris = explode('/', $module_method);
-        
+
         if (count($debris) !== 2) {
             throw new Exception('Invalid format. Expected: "Module/Method"');
         }
-        
+
         $target_module = strtolower($debris[0]);
         $target_controller = ucfirst($target_module);
         $target_method = strtolower($debris[1]);
@@ -44,11 +48,11 @@ class Modules {
         }
 
         require_once $controller_path;
-        
+
         if (!class_exists($target_controller)) {
             throw new Exception("Controller class '$target_controller' not found");
         }
-        
+
         $controller = new $target_controller($target_module);
 
         if (!method_exists($controller, $target_method)) {
@@ -63,10 +67,11 @@ class Modules {
      * Loads a module by instantiating its controller and storing it in the modules array.
      *
      * @param string $target_module The name of the target module.
-     * @return void
+     *
      * @throws Exception If the module cannot be located.
      */
-    public function load(string $target_module): void {
+    public function load(string $target_module): void
+    {
         $target_module = strtolower($target_module);
         $target_controller = ucfirst($target_module);
         $target_controller_path = '../modules/' . $target_module . '/' . $target_controller . '.php';

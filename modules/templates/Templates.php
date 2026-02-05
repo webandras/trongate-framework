@@ -1,11 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Template management class for rendering application templates.
  * Handles theme displays with support for additional CSS/JS includes.
  * Provides secure template rendering with URL invocation blocking and error handling.
  */
-class Templates extends Trongate {
-
+final class Templates extends Trongate
+{
     /**
      * Class constructor.
      *
@@ -14,7 +17,8 @@ class Templates extends Trongate {
      *
      * @param string|null $module_name The module name (auto-provided by framework)
      */
-    public function __construct(?string $module_name = null) {
+    public function __construct(?string $module_name = null)
+    {
         parent::__construct($module_name);
         block_url($this->module_name);
     }
@@ -23,9 +27,9 @@ class Templates extends Trongate {
      * Display admin theme template with provided data.
      *
      * @param array $data The data to pass to the template view
-     * @return void
      */
-    public function admin(array $data): void {
+    public function admin(array $data): void
+    {
         $data['theme'] = (isset($data['theme'])) ? $data['theme'] : 'default';
         $data['additional_includes_top'] = $this->build_additional_includes($data['additional_includes_top'] ?? []);
         $data['additional_includes_btm'] = $this->build_additional_includes($data['additional_includes_btm'] ?? []);
@@ -37,9 +41,9 @@ class Templates extends Trongate {
      * Loads the public template with optional theme variation support.
      *
      * @param array $data The data to pass to the template view
-     * @return void
      */
-    public function public(array $data): void {
+    public function public(array $data): void
+    {
         $data['additional_includes_top'] = $this->build_additional_includes($data['additional_includes_top'] ?? []);
         $data['additional_includes_btm'] = $this->build_additional_includes($data['additional_includes_btm'] ?? []);
         $this->display('public', $data);
@@ -47,24 +51,24 @@ class Templates extends Trongate {
 
     /**
      * Display 404 error page.
-     *
-     * @return void
      */
-    public function error_404(): void {
+    public function error_404(): void
+    {
         $this->display('error_404');
     }
-    
+
     /**
      * Display a template file from this module.
      *
      * @param string $template_name The name of the template file (without .php extension)
      * @param array $data Associative array of data to extract into template scope
-     * @return void
+     *
      * @throws Exception If template file is not found
      */
-    private function display(string $template_name, array $data = []): void {
+    private function display(string $template_name, array $data = []): void
+    {
         $template_path = __DIR__ . "/views/{$template_name}.php";
-        
+
         if (!file_exists($template_path)) {
             throw new Exception("Template '{$template_name}' not found at {$template_path}");
         }
@@ -77,9 +81,11 @@ class Templates extends Trongate {
      * Builds HTML code for additional includes based on file types.
      *
      * @param array $files Array of file names.
+     *
      * @return string HTML code for additional includes.
      */
-    private function build_additional_includes(array|string|null $files): string {
+    private function build_additional_includes(array|string|null $files): string
+    {
         if (!is_array($files)) {
             return ''; // Return an empty string if $files is not an array
         }
@@ -109,11 +115,14 @@ class Templates extends Trongate {
      * Builds JavaScript include code for the given file.
      *
      * @param string $file File path for JavaScript include.
+     *
      * @return string JavaScript include code.
      */
-    private function build_js_include_code(string $file): string {
+    private function build_js_include_code(string $file): string
+    {
         $code = '<script src="' . $file . '"></script>';
         $code = str_replace('""></script>', '"></script>', $code);
+
         return $code;
     }
 
@@ -121,12 +130,14 @@ class Templates extends Trongate {
      * Builds CSS include code for the given file.
      *
      * @param string $file File path for CSS include.
+     *
      * @return string CSS include code.
      */
-    private function build_css_include_code(string $file): string {
+    private function build_css_include_code(string $file): string
+    {
         $code = '<link rel="stylesheet" href="' . $file . '">';
         $code = str_replace('"">', '">', $code);
+
         return $code;
     }
-
 }

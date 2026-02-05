@@ -1,11 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Get the current URL of the web page.
  *
  * @return string The current URL as a string.
  */
-function current_url(): string {
-    $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] .  $_SERVER['REQUEST_URI'];
+function current_url(): string
+{
+    $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
     return $current_url;
 }
 
@@ -36,7 +41,6 @@ function current_url(): string {
  *
  * @param int $num
  * The 1-based index of the URL segment to retrieve.
- *
  * @param string|null $var_type
  * Optional. A PHP data type to cast the segment value to.
  * If null, the segment is returned as a string.
@@ -45,7 +49,8 @@ function current_url(): string {
  * The value of the requested URL segment, cast to the specified type
  * if provided. Returns an empty string if the segment does not exist.
  */
-function segment(int $num, ?string $var_type = null): mixed {
+function segment(int $num, ?string $var_type = null): mixed
+{
     $segments = SEGMENTS;
 
     if (isset($segments[$num])) {
@@ -65,10 +70,13 @@ function segment(int $num, ?string $var_type = null): mixed {
  * Remove query string from a URL.
  *
  * @param string $string The URL with a query string to be processed.
+ *
  * @return string The URL without the query string.
  */
-function remove_query_string(string $string): string {
-    $parts = explode("?", $string, 2);
+function remove_query_string(string $string): string
+{
+    $parts = explode('?', $string, 2);
+
     return $parts[0];
 }
 
@@ -77,9 +85,11 @@ function remove_query_string(string $string): string {
  *
  * @return int The number of URL segments after the base URL.
  */
-function get_num_segments(): int {
+function get_num_segments(): int
+{
     $url_path = str_replace(BASE_URL, '', current_url());
     $url_segments = explode('/', $url_path);
+
     return count($url_segments);
 }
 
@@ -88,8 +98,10 @@ function get_num_segments(): int {
  *
  * @return string The last segment of the URL.
  */
-function get_last_segment(): string {
+function get_last_segment(): string
+{
     $last_segment = get_last_part(current_url(), '/');
+
     return $last_segment;
 }
 
@@ -99,16 +111,16 @@ function get_last_segment(): string {
  * to be an internal route, and the BASE_URL is automatically prepended.
  *
  * @param string $target_url The URL or internal route to redirect to.
- * @return void
  */
-function redirect(string $target_url): void {
+function redirect(string $target_url): void
+{
     $str = substr($target_url, 0, 4);
     if ($str != 'http') {
         $target_url = BASE_URL . $target_url;
     }
 
     header('location: ' . $target_url);
-    die();
+    exit();
 }
 
 /**
@@ -116,20 +128,22 @@ function redirect(string $target_url): void {
  *
  * @return string The URL of the previous page or an empty string.
  */
-function previous_url(): string {
+function previous_url(): string
+{
     if (isset($_SERVER['HTTP_REFERER'])) {
         $url = $_SERVER['HTTP_REFERER'];
     } else {
         $url = '';
     }
+
     return $url;
 }
 
 /**
  * Generates an HTML anchor tag with optional URL resolution and XSS protection.
  *
- * This function creates an anchor tag (<a>). If the URL is relative (does not 
- * start with 'http://', 'https://', or '//'), the BASE_URL constant is 
+ * This function creates an anchor tag (<a>). If the URL is relative (does not
+ * start with 'http://', 'https://', or '//'), the BASE_URL constant is
  * prepended to ensure the link points to the correct internal route.
  *
  * Attributes and URLs are automatically escaped to prevent XSS attacks.
@@ -137,9 +151,11 @@ function previous_url(): string {
  * @param string $url The destination URL. Can be relative or absolute.
  * @param string|null $text The visible link text. If null, the URL is used.
  * @param array $attributes Associative array of HTML attributes (e.g., ['class' => 'btn']).
+ *
  * @return string The generated HTML anchor tag.
  */
-function anchor(string $url, ?string $text = null, array $attributes = []): string {
+function anchor(string $url, ?string $text = null, array $attributes = []): string
+{
     // Determine if the URL is absolute or relative
     if (preg_match('/^(https?:\/\/|\/\/)/i', $url)) {
         $full_url = $url;
@@ -161,5 +177,6 @@ function anchor(string $url, ?string $text = null, array $attributes = []): stri
     }
 
     $tag = '<a href="' . $escaped_url . '"' . $attr_string . '>' . $text_to_use . '</a>';
+
     return $tag;
 }

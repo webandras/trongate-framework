@@ -1,12 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Truncates a string to a specified maximum length.
  *
  * @param string $value The input string to be truncated.
  * @param int $max_length The maximum length of the truncated string.
+ *
  * @return string The truncated string with an ellipsis (...) if necessary.
  */
-function truncate_str(string $value, int $max_length): string {
+function truncate_str(string $value, int $max_length): string
+{
     if (strlen($value) <= $max_length) {
         return $value;
     } else {
@@ -19,15 +24,18 @@ function truncate_str(string $value, int $max_length): string {
  *
  * @param string $value The input string to be truncated.
  * @param int $max_words The maximum number of words in the truncated string.
+ *
  * @return string The truncated string with an ellipsis (...) if necessary.
  */
-function truncate_words(string $value, int $max_words): string {
+function truncate_words(string $value, int $max_words): string
+{
     $words = explode(' ', $value);
 
     if (count($words) <= $max_words) {
         return $value;
     } else {
         $truncated = implode(' ', array_slice($words, 0, $max_words));
+
         return $truncated . '...';
     }
 }
@@ -37,15 +45,18 @@ function truncate_words(string $value, int $max_words): string {
  *
  * @param string $str The input string to retrieve the last part from.
  * @param string $delimiter The delimiter used to split the string (default: '-').
+ *
  * @return string The last part of the input string.
  */
-function get_last_part(string $str, string $delimiter = '-'): string {
+function get_last_part(string $str, string $delimiter = '-'): string
+{
     if (strpos($str, $delimiter) !== false) {
         $parts = explode($delimiter, $str);
         $last_part = end($parts);
     } else {
         $last_part = $str;
     }
+
     return $last_part;
 }
 
@@ -58,15 +69,18 @@ function get_last_part(string $str, string $delimiter = '-'): string {
  * @param string $string The full string from which to extract content.
  * @param string $start_delim The starting delimiter of the content to extract.
  * @param string $end_delim The ending delimiter of the content to extract.
+ *
  * @return string The content found between the specified delimiters or an empty string if no content is found.
  */
-function extract_content(string $string, string $start_delim, string $end_delim): string {
+function extract_content(string $string, string $start_delim, string $end_delim): string
+{
     if (($start_pos = strpos($string, $start_delim)) !== false) {
         $start_pos += strlen($start_delim);
         if (($end_pos = strpos($string, $end_delim, $start_pos)) !== false) {
             return substr($string, $start_pos, $end_pos - $start_pos);
         }
     }
+
     return '';
 }
 
@@ -77,9 +91,11 @@ function extract_content(string $string, string $start_delim, string $end_delim)
  * @param string $end The ending substring.
  * @param string $haystack The string from which to remove the substring.
  * @param bool $remove_all Optional argument to remove all matching portions. Defaults to false.
+ *
  * @return string The modified string.
  */
-function remove_substr_between(string $start, string $end, string $haystack, bool $remove_all = false): string {
+function remove_substr_between(string $start, string $end, string $haystack, bool $remove_all = false): string
+{
     if (!$remove_all) {
         $start_pos = strpos($haystack, $start);
         if ($start_pos === false) {
@@ -89,6 +105,7 @@ function remove_substr_between(string $start, string $end, string $haystack, boo
         if ($end_pos === false) {
             return $haystack;
         }
+
         return substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
     } else {
         while (($start_pos = strpos($haystack, $start)) !== false) {
@@ -98,6 +115,7 @@ function remove_substr_between(string $start, string $end, string $haystack, boo
             }
             $haystack = substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
         }
+
         return $haystack;
     }
 }
@@ -107,9 +125,11 @@ function remove_substr_between(string $start, string $end, string $haystack, boo
  *
  * @param float $num The number to be formatted.
  * @param string|null $currency_symbol The optional currency symbol to be added.
+ *
  * @return string|float The formatted nice price.
  */
-function nice_price(float $num, ?string $currency_symbol = null): string|float {
+function nice_price(float $num, ?string $currency_symbol = null): string|float
+{
     $num = number_format($num, 2);
     $nice_price = str_replace('.00', '', $num);
 
@@ -128,9 +148,11 @@ function nice_price(float $num, ?string $currency_symbol = null): string|float {
  *
  * @param string $value The string to be converted into a slug.
  * @param bool $transliteration Whether to transliterate characters to ASCII.
+ *
  * @return string The slugified version of the input string.
  */
-function url_title(string $value, bool $transliteration = true): string {
+function url_title(string $value, bool $transliteration = true): string
+{
     if (extension_loaded('intl') && $transliteration === true) {
         $transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
         $value = $transliterator->transliterate($value);
@@ -139,6 +161,7 @@ function url_title(string $value, bool $transliteration = true): string {
     $slug = preg_replace('~[^\pL\d]+~u', '-', $slug);
     $slug = trim($slug, '- ');
     $slug = strtolower($slug);
+
     return $slug;
 }
 
@@ -168,33 +191,36 @@ function url_title(string $value, bool $transliteration = true): string {
  * @param string $filename The filename to sanitize.
  * @param bool $transliteration Whether to transliterate international characters to ASCII (default: true).
  * @param int $max_length Maximum length for the base filename, excluding extension (default: 200).
+ *
  * @return string The sanitized filename with preserved extension.
+ *
  * @throws InvalidArgumentException If filename contains null bytes.
  */
-function sanitize_filename(string $filename, bool $transliteration = true, int $max_length = 200): string {
+function sanitize_filename(string $filename, bool $transliteration = true, int $max_length = 200): string
+{
     // Security: Prevent null byte attacks
     if (strpos($filename, "\0") !== false) {
-        throw new InvalidArgumentException("Filename contains null bytes");
+        throw new InvalidArgumentException('Filename contains null bytes');
     }
-    
+
     // Extract components
     $extension = pathinfo($filename, PATHINFO_EXTENSION);
     $basename = pathinfo($filename, PATHINFO_FILENAME);
-    
+
     // Handle empty basename (e.g., hidden files like ".htaccess")
     if (empty($basename)) {
         $basename = 'file_' . uniqid();
     }
-    
+
     // Use url_title() for robust string cleaning
     // This handles international characters, HTML entities, special chars, etc.
     $clean_basename = url_title($basename, $transliteration);
-    
+
     // Fallback if url_title() returns empty (very rare edge case)
     if (empty($clean_basename)) {
         $clean_basename = 'file_' . uniqid();
     }
-    
+
     // Limit length to prevent filesystem issues
     // Most filesystems support 255 bytes, but leave room for extension
     if (strlen($clean_basename) > $max_length) {
@@ -202,10 +228,10 @@ function sanitize_filename(string $filename, bool $transliteration = true, int $
         // Remove any trailing dashes created by the substring
         $clean_basename = rtrim($clean_basename, '-');
     }
-    
+
     // Clean and normalize extension (alphanumeric only, lowercase)
     $clean_extension = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $extension));
-    
+
     // Reconstruct filename
     return $clean_extension ? "{$clean_basename}.{$clean_extension}" : $clean_basename;
 }
@@ -216,17 +242,19 @@ function sanitize_filename(string $filename, bool $transliteration = true, int $
  * @param string|null $input The string to be escaped. Null values are converted to empty strings.
  * @param string $output_format The desired output format: 'html' (default), 'xml', 'json', 'javascript', or 'attribute'.
  * @param string $encoding The character encoding to use for escaping. Defaults to 'UTF-8'.
- * 
+ *
  * @return string The escaped and formatted string ready for safe inclusion in the specified context.
+ *
  * @throws InvalidArgumentException if an unsupported output format is provided.
  * @throws RuntimeException if encoding fails due to invalid character encoding.
  * @throws JsonException if JSON encoding fails (requires PHP 7.3+).
  */
-function out(?string $input, string $output_format = 'html', string $encoding = 'UTF-8'): string {
+function out(?string $input, string $output_format = 'html', string $encoding = 'UTF-8'): string
+{
     if ($input === null) {
         return '';
     }
-    
+
     switch ($output_format) {
         case 'html':
         case 'attribute':
@@ -234,34 +262,37 @@ function out(?string $input, string $output_format = 'html', string $encoding = 
             if ($result === false) {
                 throw new RuntimeException("Failed to encode string with encoding: {$encoding}");
             }
+
             return $result;
-            
+
         case 'xml':
             $result = htmlspecialchars($input, ENT_XML1, $encoding);
             if ($result === false) {
                 throw new RuntimeException("Failed to encode string with encoding: {$encoding}");
             }
+
             return $result;
-            
+
         case 'json':
             return json_encode(
-                $input, 
-                JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | 
+                $input,
+                JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT |
                 JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
             );
-            
+
         case 'javascript':
             $encoded = json_encode(
-                $input, 
-                JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | 
+                $input,
+                JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT |
                 JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
             );
             // Remove surrounding quotes for JS string content
             if (strlen($encoded) >= 2 && $encoded[0] === '"' && $encoded[strlen($encoded)-1] === '"') {
                 return substr($encoded, 1, -1);
             }
+
             return $encoded;
-            
+
         default:
             throw new InvalidArgumentException("Unsupported output format: '{$output_format}'");
     }
@@ -272,9 +303,11 @@ function out(?string $input, string $output_format = 'html', string $encoding = 
  *
  * @param int $length (Optional) The length of the random string. Default is 32.
  * @param bool $uppercase (Optional) Whether to use uppercase characters. Default is false.
+ *
  * @return string The randomly generated string.
  */
-function make_rand_str(int $length = 32, bool $uppercase = false): string {
+function make_rand_str(int $length = 32, bool $uppercase = false): string
+{
     $characters = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -283,6 +316,7 @@ function make_rand_str(int $length = 32, bool $uppercase = false): string {
         $randomInt = ord($randomByte) % $charactersLength;
         $randomString .= $characters[$randomInt];
     }
+
     return $uppercase ? strtoupper($randomString) : $randomString;
 }
 
@@ -298,9 +332,11 @@ function make_rand_str(int $length = 32, bool $uppercase = false): string {
  *                                 'opening_string_after' => '<div>',
  *                                 'close_string_after' => '</div>'
  *                             ]
+ *
  * @return string The modified HTML content.
  */
-function replace_html_tags(string $content, array $specifications): string {
+function replace_html_tags(string $content, array $specifications): string
+{
     $opening_string_before = $specifications['opening_string_before'];
     $close_string_before = $specifications['close_string_before'];
     $opening_string_after = $specifications['opening_string_after'];
@@ -318,10 +354,13 @@ function replace_html_tags(string $content, array $specifications): string {
  * @param string $content The original HTML content to be processed.
  * @param string $opening_pattern The pattern specifying the start of the code section to remove.
  * @param string $closing_pattern The pattern specifying the end of the code section to remove.
+ *
  * @return string The HTML content with specified code sections removed.
  */
-function remove_html_code(string $content, string $opening_pattern, string $closing_pattern): string {
+function remove_html_code(string $content, string $opening_pattern, string $closing_pattern): string
+{
     $pattern = '/(' . preg_quote($opening_pattern, '/') . ')(.*?)(\s*?' . preg_quote($closing_pattern, '/') . ')/is';
+
     return preg_replace($pattern, '', $content);
 }
 
@@ -330,9 +369,11 @@ function remove_html_code(string $content, string $opening_pattern, string $clos
  *
  * @param string $str The input string to be filtered and sanitized.
  * @param string[] $allowed_tags An optional array of allowed HTML tags (default is an empty array).
+ *
  * @return string The filtered and sanitized string.
  */
-function filter_str(string $str, array $allowed_tags = []): string {
+function filter_str(string $str, array $allowed_tags = []): string
+{
     // Remove HTML & PHP tags
     $str = strip_tags($str, implode('', $allowed_tags));
 
@@ -347,10 +388,12 @@ function filter_str(string $str, array $allowed_tags = []): string {
 
 /**
  * Alias for filter_str function for backward compatibility.
+ *
  * @deprecated This function is deprecated and will be removed from the Trongate framework on June 3, 2026.
  * Developers are encouraged to globally replace instances of 'filter_string(' with 'filter_str(' throughout their site or application.
  */
-function filter_string(string $string, array $allowed_tags = []): string {
+function filter_string(string $string, array $allowed_tags = []): string
+{
     return filter_str($string, $allowed_tags);
 }
 
@@ -359,9 +402,11 @@ function filter_string(string $string, array $allowed_tags = []): string {
  *
  * @param string $name The input name to be filtered and sanitized.
  * @param string[] $allowed_chars An optional array of allowed characters.
+ *
  * @return string The filtered and sanitized name.
  */
-function filter_name(string $name, array $allowed_chars = []) {
+function filter_name(string $name, array $allowed_chars = []): string
+{
     // Similar to filter_string() but better suited for usernames, etc.
 
     // Remove HTML & PHP tags (please read note above for more!)

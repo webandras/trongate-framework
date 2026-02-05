@@ -99,7 +99,7 @@
 <footer>
     <div class="footer-lg">
         <div class="footer-left">
-            <span>&copy; <?= date('Y').' '.WEBSITE_NAME ?></span>
+            <span>&copy; <?= date('Y') . ' ' . WEBSITE_NAME ?></span>
             <span class="separator">|</span>
             <a href="https//trongate.io/" target="_blank">Powered by Trongate</a>
         </div>
@@ -110,7 +110,7 @@
     </div>
     
     <div class="footer-sm">
-        <div>&copy; <?= date('Y').' '.WEBSITE_NAME ?></div>
+        <div>&copy; <?= date('Y') . ' ' . WEBSITE_NAME ?></div>
         <div class="footer-sm-links">
             <a href="https//trongate.io/" target="_blank">Powered by Trongate</a>
             <span class="separator">|</span>

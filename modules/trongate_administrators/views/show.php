@@ -7,13 +7,13 @@
     <div class="card-body">
         <div class="text-right mb-3">
             <?php
-            echo anchor($back_url, 'Back', array('class' => 'button alt'));
-            echo anchor(BASE_URL.'trongate_administrators/create/'.$update_id, 'Edit', array('class' => 'button'));
+            echo anchor($back_url, 'Back', ['class' => 'button alt']);
+echo anchor(BASE_URL . 'trongate_administrators/create/' . $update_id, 'Edit', ['class' => 'button']);
 
-            if ($is_own_account === false) {
-                echo anchor('trongate_administrators/delete_conf/'.$update_id, 'Delete', array('class' => 'button danger'));
-            }
-            ?>
+if ($is_own_account === false) {
+    echo anchor('trongate_administrators/delete_conf/' . $update_id, 'Delete', ['class' => 'button danger']);
+}
+?>
         </div>
         
         <div class="detail-grid">

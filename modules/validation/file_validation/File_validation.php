@@ -1,11 +1,13 @@
 <?php
+
+declare(strict_types=1);
 /**
  * File_validation Class (Child Module)
  *
- * This class provides file validation services for the Trongate framework and is 
+ * This class provides file validation services for the Trongate framework and is
  * specifically designed to be invoked by the parent Validation module. It handles
  * various file validation criteria such as file type, size, dimensions, and security scanning.
- * 
+ *
  * The class is not intended for direct use by framework users. It should only be accessed
  * through the parent Validation module, which automatically loads and uses this child module
  * when file validation is required.
@@ -16,9 +18,8 @@
  * This class is automatically invoked by the Validation module when $_FILES data is detected.
  * Developers should never need to load or interact with this module directly.
  */
-
-class File_validation extends Trongate {
-
+final class File_validation extends Trongate
+{
     /**
      * Class constructor.
      *
@@ -27,14 +28,15 @@ class File_validation extends Trongate {
      *
      * @param string|null $module_name The module name (auto-provided by framework)
      */
-    public function __construct(?string $module_name = null) {
+    public function __construct(?string $module_name = null)
+    {
         parent::__construct($module_name);
         block_url($this->module_name);
     }
 
     /**
      * Validates an uploaded file based on provided rules.
-     * 
+     *
      * This is the main entry point for file validation. It performs security checks
      * and then validates the file against all specified rules.
      *
@@ -42,9 +44,11 @@ class File_validation extends Trongate {
      * @param string $label The human-readable label for the file field.
      * @param string $rules The validation rules separated by '|' (e.g., 'allowed_types[jpg,png]|max_size[2000]').
      * @param array $file The file array from $_FILES.
+     *
      * @return array An array of error messages (empty if validation passes).
      */
-    public function validate(string $key, string $label, string $rules, array $file): array {
+    public function validate(string $key, string $label, string $rules, array $file): array
+    {
         $errors = [];
 
         // First, run security validation
@@ -52,6 +56,7 @@ class File_validation extends Trongate {
             $this->validate_file_content($file, $key);
         } catch (Exception $e) {
             $errors[] = $e->getMessage();
+
             return $errors; // Stop validation if security threat detected
         }
 
@@ -71,14 +76,16 @@ class File_validation extends Trongate {
 
     /**
      * Parses the validation rules string into an associative array.
-     * 
+     *
      * Converts a string like 'allowed_types[jpg,png]|max_size[2000]|max_width[1200]'
      * into ['allowed_types' => 'jpg,png', 'max_size' => '2000', 'max_width' => '1200']
      *
      * @param string $rules The validation rules string.
+     *
      * @return array An associative array of rule names and their parameters.
      */
-    private function parse_rules(string $rules): array {
+    private function parse_rules(string $rules): array
+    {
         $parsed_rules = [];
         $rules_array = explode('|', $rules);
 
@@ -104,23 +111,25 @@ class File_validation extends Trongate {
      * @param string $rule_value The parameter value for the rule.
      * @param array $file The file array from $_FILES.
      * @param string $label The human-readable label for the file field.
+     *
      * @return string An error message if validation fails, empty string if passes.
      */
-    private function run_validation_check(string $rule_name, string $rule_value, array $file, string $label): string {
+    private function run_validation_check(string $rule_name, string $rule_value, array $file, string $label): string
+    {
         switch ($rule_name) {
             case 'allowed_types':
                 return $this->check_allowed_types($file['name'], $rule_value, $label);
-            
+
             case 'max_size':
                 return $this->check_file_size($file['size'], $rule_value, $label);
-            
+
             case 'max_width':
             case 'max_height':
             case 'min_width':
             case 'min_height':
             case 'square':
                 return $this->check_image_dimensions($file['tmp_name'], $rule_name, $rule_value, $label);
-            
+
             default:
                 // Unknown rule - ignore it
                 return '';
@@ -133,9 +142,11 @@ class File_validation extends Trongate {
      * @param string $filename The name of the uploaded file.
      * @param string $allowed_types Comma-separated list of allowed extensions (e.g., 'jpg,png,gif').
      * @param string $label The human-readable label for the file field.
+     *
      * @return string Error message if validation fails, empty string if passes.
      */
-    private function check_allowed_types(string $filename, string $allowed_types, string $label): string {
+    private function check_allowed_types(string $filename, string $allowed_types, string $label): string
+    {
         $allowed_extensions = explode(',', strtolower($allowed_types));
         $file_extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
@@ -152,9 +163,11 @@ class File_validation extends Trongate {
      * @param int $file_size The size of the file in bytes.
      * @param string $max_size_kb The maximum allowed size in kilobytes.
      * @param string $label The human-readable label for the file field.
+     *
      * @return string Error message if validation fails, empty string if passes.
      */
-    private function check_file_size(int $file_size, string $max_size_kb, string $label): string {
+    private function check_file_size(int $file_size, string $max_size_kb, string $label): string
+    {
         $file_size_kb = $file_size / 1024; // Convert bytes to KB
         $max_size = (float) $max_size_kb;
 
@@ -172,12 +185,14 @@ class File_validation extends Trongate {
      * @param string $rule_name The dimension rule name (max_width, max_height, min_width, min_height, square).
      * @param string $rule_value The dimension value in pixels.
      * @param string $label The human-readable label for the file field.
+     *
      * @return string Error message if validation fails, empty string if passes.
      */
-    private function check_image_dimensions(string $tmp_file_path, string $rule_name, string $rule_value, string $label): string {
+    private function check_image_dimensions(string $tmp_file_path, string $rule_name, string $rule_value, string $label): string
+    {
         // First, verify it's an image file
         $dimensions = @getimagesize($tmp_file_path);
-        
+
         if ($dimensions === false) {
             return 'The ' . $label . ' must be a valid image file.';
         }
@@ -191,30 +206,35 @@ class File_validation extends Trongate {
                 if ($width > $value) {
                     return 'The ' . $label . ' width cannot exceed ' . $value . ' pixels.';
                 }
+
                 break;
 
             case 'max_height':
                 if ($height > $value) {
                     return 'The ' . $label . ' height cannot exceed ' . $value . ' pixels.';
                 }
+
                 break;
 
             case 'min_width':
                 if ($width < $value) {
                     return 'The ' . $label . ' width must be at least ' . $value . ' pixels.';
                 }
+
                 break;
 
             case 'min_height':
                 if ($height < $value) {
                     return 'The ' . $label . ' height must be at least ' . $value . ' pixels.';
                 }
+
                 break;
 
             case 'square':
                 if ($width !== $height) {
                     return 'The ' . $label . ' must be square (width must equal height).';
                 }
+
                 break;
         }
 
@@ -229,10 +249,11 @@ class File_validation extends Trongate {
      *
      * @param array $file The file array from $_FILES.
      * @param string $field_name The form field name (for error reporting).
-     * @return void
+     *
      * @throws RuntimeException If a security threat is detected or file cannot be opened.
      */
-    private function validate_file_content(array $file, string $field_name): void {
+    private function validate_file_content(array $file, string $field_name): void
+    {
         if (($file_handle = @fopen($file['tmp_name'], 'rb')) === false) {
             throw new RuntimeException('Unable to open file for security scanning.');
         }
@@ -248,7 +269,7 @@ class File_validation extends Trongate {
             '/\<\!ENTITY/i',       // XML entity declaration
             '/\beval\s*\(/i',      // eval() function
             '/\bexec\s*\(/i',      // exec() function
-            '/\bshell_exec\s*\(/i' // shell_exec() function
+            '/\bshell_exec\s*\(/i', // shell_exec() function
         ];
 
         foreach ($dangerous_patterns as $pattern) {
@@ -264,16 +285,18 @@ class File_validation extends Trongate {
      * @param string $string The string to search within.
      * @param string $start_delim The starting delimiter.
      * @param string $end_delim The ending delimiter.
+     *
      * @return string The content between delimiters, or empty string if not found.
      */
-    private function extract_content(string $string, string $start_delim, string $end_delim): string {
+    private function extract_content(string $string, string $start_delim, string $end_delim): string
+    {
         if (($start_pos = strpos($string, $start_delim)) !== false) {
             $start_pos += strlen($start_delim);
             if (($end_pos = strpos($string, $end_delim, $start_pos)) !== false) {
                 return substr($string, $start_pos, $end_pos - $start_pos);
             }
         }
+
         return '';
     }
-
 }

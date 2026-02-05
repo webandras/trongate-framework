@@ -8,7 +8,7 @@ if ($include_showing_statement && $total_rows > 0) {
 if ($total_pages > 1) {
     echo '<nav class="pagination">';
     echo '<ul class="pagination-list">';
-    
+
     foreach ($pagination_links as $link) {
         if ($link['type'] === 'ellipsis') {
             echo '<li class="pagination-ellipsis"><span>' . $link['label'] . '</span></li>';
@@ -21,7 +21,7 @@ if ($total_pages > 1) {
             echo '<li><a href="' . $link['url'] . '" class="' . $class . '">' . $link['label'] . '</a></li>';
         }
     }
-    
+
     echo '</ul>';
     echo '</nav>';
 }

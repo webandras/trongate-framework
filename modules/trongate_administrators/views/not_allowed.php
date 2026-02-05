@@ -18,7 +18,7 @@
         if (isset($login_url)) {
             echo anchor($login_url, 'Back to Login');
         }
-        ?>
+    ?>
     </main>
     <style>
         /* Optional inline styling for emphasis */

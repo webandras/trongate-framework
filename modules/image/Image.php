@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Image manipulation class to handle loading, resizing, and saving images.
  * Supports JPEG, GIF, PNG, and WEBP image formats using PHP's GD library.
@@ -7,10 +9,11 @@
  *
  * Requires GD extension to be enabled in the PHP configuration.
  */
-class Image {
-
+final class Image
+{
     /**
      * Holds the GD image resource instance.
+     *
      * @var resource|GdImage|null
      */
     private $image;
@@ -18,22 +21,19 @@ class Image {
     /**
      * Stores the type of the image as one of the PHP IMAGETYPE_XXX constants.
      * This type determines which MIME type to use when serving the image via HTTP.
-     * @var int|null
      */
-    private $image_type;
+    private ?int $image_type;
 
     /**
      * The file path of the loaded image, used primarily for reference and during saving operations.
-     * @var string|null
      */
-    private $file_name;
+    private ?string $file_name;
 
     /**
      * Associative array mapping image types to their respective MIME types.
      * This mapping supports content negotiation when images are served via HTTP.
-     * @var array
      */
-    private $content_type = [
+    private array $content_type = [
         IMAGETYPE_JPEG => 'image/jpeg',
         IMAGETYPE_GIF => 'image/gif',
         IMAGETYPE_PNG => 'image/png',
@@ -42,21 +42,22 @@ class Image {
 
     /**
      * Constructor for standalone image utility
-     * 
+     *
      * @param string|null $filename Path to image file to load
      */
-    public function __construct(?string $filename = null) {
+    public function __construct(?string $filename = null)
+    {
 
         // Protect this module from unwanted browser access
         block_url('image');
-        
+
         if (!extension_loaded('gd')) {
             echo "<h1 style='color: red;'>*** Warning ***</h1>";
-            echo "<h2>Image processing requires the GD extension for PHP</h2>";
+            echo '<h2>Image processing requires the GD extension for PHP</h2>';
             echo "<p>Please open your <i>'php.ini'</i> file and search for <b>'extension=gd'</b> then remove the leading semicolon or add this line, save and restart your web server.</p>";
-            die();
+            exit();
         }
-        
+
         if ($filename) {
             $this->file_name = $filename;
             $this->load($filename);
@@ -92,7 +93,8 @@ class Image {
      *
      * @throws Exception If the file upload fails or if there are issues during image processing.
      */
-    public function upload(array $data): array {
+    public function upload(array $data): array
+    {
         // Extract configuration data
         $destination = $data['destination'] ?? '';
         $max_width = $data['max_width'] ?? 450;
@@ -124,9 +126,9 @@ class Image {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime_type = finfo_file($finfo, $uploaded_file['tmp_name']);
         finfo_close($finfo);
-        
+
         if (!in_array($mime_type, $allowed_types)) {
-            throw new Exception("Invalid file type. Only image files are allowed.");
+            throw new Exception('Invalid file type. Only image files are allowed.');
         }
 
         // Determine destination directory
@@ -146,7 +148,7 @@ class Image {
             $extension = pathinfo($uploaded_file['name'], PATHINFO_EXTENSION);
             $base_name = uniqid('img_', true);
             $extension_with_dot = '.' . $extension;
-            
+
             // Get unique file path
             $file_path = $this->ensure_unique_path($destination, $base_name, $extension_with_dot);
             $file_name = basename($file_path);
@@ -156,7 +158,7 @@ class Image {
             $file_info_parts = return_file_info($sanitized);
             $base_name = $file_info_parts['file_name'];
             $extension = $file_info_parts['file_extension']; // Already includes dot
-            
+
             // Get unique file path
             $file_path = $this->ensure_unique_path($destination, $base_name, $extension);
             $file_name = basename($file_path);
@@ -164,7 +166,7 @@ class Image {
 
         // Move uploaded file
         if (!move_uploaded_file($uploaded_file['tmp_name'], $file_path)) {
-            throw new Exception("Failed to move uploaded file to destination.");
+            throw new Exception('Failed to move uploaded file to destination.');
         }
 
         // Build file info array
@@ -172,7 +174,7 @@ class Image {
             'file_name' => $file_name,
             'file_path' => $file_path,
             'file_type' => $mime_type,
-            'file_size' => $uploaded_file['size']
+            'file_size' => $uploaded_file['size'],
         ];
 
         // Load the uploaded image for further processing
@@ -201,27 +203,27 @@ class Image {
             } else {
                 $thumbnail_base_dir = rtrim($thumbnail_dir, '/');
             }
-            
+
             // Create thumbnail directory if it doesn't exist
             if (!is_dir($thumbnail_base_dir)) {
                 if (!mkdir($thumbnail_base_dir, 0755, true)) {
                     throw new Exception("Failed to create thumbnail directory: {$thumbnail_base_dir}");
                 }
             }
-            
+
             // Extract filename parts for thumbnail
             $thumbnail_file_info = return_file_info($file_name);
             $thumbnail_base_name = $thumbnail_file_info['file_name'];
             $thumbnail_extension = $thumbnail_file_info['file_extension'];
-            
+
             // Get unique thumbnail path (might need different naming if same dir as main)
             if ($thumbnail_base_dir === $destination) {
                 // If thumbnail is in same directory as main image, use different base name
                 $thumbnail_base_name = 'thumb_' . $thumbnail_base_name;
             }
-            
+
             $thumbnail_path = $this->ensure_unique_path($thumbnail_base_dir, $thumbnail_base_name, $thumbnail_extension);
-            
+
             $thumbnail_data = [
                 'new_file_path' => $thumbnail_path,
                 'max_width' => $thumbnail_max_width,
@@ -244,10 +246,12 @@ class Image {
      * It is used to provide meaningful feedback when a file upload fails.
      *
      * @param int $error_code The file upload error code (e.g., UPLOAD_ERR_INI_SIZE).
+     *
      * @return string A user-friendly error message corresponding to the error code.
      */
-    private function get_upload_error_message(int $error_code): string {
-        return match($error_code) {
+    private function get_upload_error_message(int $error_code): string
+    {
+        return match ($error_code) {
             UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds the upload_max_filesize directive',
             UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive',
             UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded',
@@ -268,7 +272,8 @@ class Image {
      *
      * @return string The unique file path that does not exist in the directory.
      */
-    private function ensure_unique_path(string $directory, string $base_name, string $extension): string {
+    private function ensure_unique_path(string $directory, string $base_name, string $extension): string
+    {
         $final_path = $directory . '/' . $base_name . $extension;
 
         // 1. Check if the base file already exists (e.g., car.jpg)
@@ -278,7 +283,7 @@ class Image {
 
         // 2. Base file exists, start indexing duplicates from '2'
         $counter = 2;
-        
+
         do {
             $final_path = $directory . '/' . $base_name . '_' . $counter . $extension;
             $counter++;
@@ -288,19 +293,20 @@ class Image {
     }
 
     /**
-    * Loads and validates an image file into memory.
-    *
-    * This method performs several steps:
-    * 1. Validates the image file for type, size and memory requirements
-    * 2. Determines the image type (JPEG, GIF, PNG, WEBP)
-    * 3. Creates an appropriate GD image resource based on the type
-    * 
-    * @param string $filename Path to the image file to be loaded
-    * @throws InvalidArgumentException If the image type is unsupported
-    * @throws RuntimeException If WebP support is unavailable or if image resource creation fails
-    * @return void
-    */
-    public function load(string $filename): void {
+     * Loads and validates an image file into memory.
+     *
+     * This method performs several steps:
+     * 1. Validates the image file for type, size and memory requirements
+     * 2. Determines the image type (JPEG, GIF, PNG, WEBP)
+     * 3. Creates an appropriate GD image resource based on the type
+     *
+     * @param string $filename Path to the image file to be loaded
+     *
+     * @throws InvalidArgumentException If the image type is unsupported
+     * @throws RuntimeException If WebP support is unavailable or if image resource creation fails
+     */
+    public function load(string $filename): void
+    {
 
         // Validate file before any operations
         $this->validate_image($filename);
@@ -311,44 +317,49 @@ class Image {
         switch ($this->image_type) {
             case IMAGETYPE_JPEG:
                 $this->image = imagecreatefromjpeg($filename);
+
                 break;
             case IMAGETYPE_GIF:
                 $this->image = imagecreatefromgif($filename);
+
                 break;
             case IMAGETYPE_PNG:
                 $this->image = imagecreatefrompng($filename);
+
                 break;
             case IMAGETYPE_WEBP:
                 if (!function_exists('imagecreatefromwebp')) {
                     throw new RuntimeException('WebP support not available in this PHP installation');
                 }
                 $this->image = imagecreatefromwebp($filename);
+
                 break;
             default:
-                throw new InvalidArgumentException("Unsupported image type");
+                throw new InvalidArgumentException('Unsupported image type');
         }
 
         if ($this->image === false) {
-            throw new RuntimeException("Failed to create image resource");
+            throw new RuntimeException('Failed to create image resource');
         }
 
     }
 
     /**
-    * Performs comprehensive validation of an image file.
-    * 
-    * This method executes multiple validation checks on an image file including:
-    * - File existence verification
-    * - MIME type validation using finfo and getimagesize
-    * - File signature/magic number verification
-    * - Memory requirement calculations
-    *
-    * @param string $filename The path to the image file to validate
-    * @throws InvalidArgumentException If the file doesn't exist, has invalid MIME type, or invalid signature
-    * @throws RuntimeException If image info can't be read or memory requirements exceed limits
-    * @return void
-    */
-    private function validate_image(string $filename): void {
+     * Performs comprehensive validation of an image file.
+     *
+     * This method executes multiple validation checks on an image file including:
+     * - File existence verification
+     * - MIME type validation using finfo and getimagesize
+     * - File signature/magic number verification
+     * - Memory requirement calculations
+     *
+     * @param string $filename The path to the image file to validate
+     *
+     * @throws InvalidArgumentException If the file doesn't exist, has invalid MIME type, or invalid signature
+     * @throws RuntimeException If image info can't be read or memory requirements exceed limits
+     */
+    private function validate_image(string $filename): void
+    {
 
         if (!file_exists($filename)) {
             throw new InvalidArgumentException("File not found: $filename");
@@ -384,14 +395,15 @@ class Image {
         $signatures = [
             IMAGETYPE_JPEG => ["\xFF\xD8\xFF"],
             IMAGETYPE_PNG => ["\x89\x50\x4E\x47\x0D\x0A\x1A\x0A"],
-            IMAGETYPE_GIF => ["GIF87a", "GIF89a"],
-            IMAGETYPE_WEBP => ["RIFF", "WEBP"]
+            IMAGETYPE_GIF => ['GIF87a', 'GIF89a'],
+            IMAGETYPE_WEBP => ['RIFF', 'WEBP'],
         ];
 
         $valid_signature = false;
         foreach ($signatures[$image_info[2]] ?? [] as $sig) {
             if (strpos($file_content, $sig) === 0) {
                 $valid_signature = true;
+
                 break;
             }
         }
@@ -399,7 +411,7 @@ class Image {
             throw new InvalidArgumentException('Invalid file signature');
         }
 
-        if (($file = @fopen($filename, 'rb')) === FALSE) {
+        if (($file = @fopen($filename, 'rb')) === false) {
             throw new RuntimeException('Unable to analyze image file');
         }
         $opening_bytes = fread($file, 256);
@@ -428,34 +440,39 @@ class Image {
      * @param string|null $filename Optional. The path where the image file will be saved. Defaults to the class's internal filename if null.
      * @param int $compression Optional. Compression level for JPEG and WEBP images, from 0 (worst quality, smallest file) to 100 (best quality, largest file). Defaults to 100.
      * @param int|null $permissions Optional. File permissions to set on the saved file. Uses format (e.g., 0644). If not specified, the system's default permissions are used.
-     * @return void
+     *
      * @throws InvalidArgumentException If an unsupported image type is encountered or required properties are not set.
      * @throws RuntimeException If writing the file fails.
      */
-    public function save(?string $filename = null, int $compression = 100, ?int $permissions = null): void {
+    public function save(?string $filename = null, int $compression = 100, ?int $permissions = null): void
+    {
         $filename = $filename ?: $this->file_name;
 
         switch ($this->get_image_type()) {
             case IMAGETYPE_JPEG:
                 imagejpeg($this->image, $filename, $compression);
+
                 break;
             case IMAGETYPE_GIF:
                 imagegif($this->image, $filename);
+
                 break;
             case IMAGETYPE_WEBP:
                 imagewebp($this->image, $filename, $compression);
+
                 break;
             case IMAGETYPE_PNG:
                 imagesavealpha($this->image, true);
                 imagepng($this->image, $filename);
+
                 break;
             default:
-                throw new InvalidArgumentException("Unsupported image type or required properties not set.");
+                throw new InvalidArgumentException('Unsupported image type or required properties not set.');
         }
 
         if ($permissions !== null) {
             if (!chmod($filename, $permissions)) {
-                throw new RuntimeException("Failed to set file permissions.");
+                throw new RuntimeException('Failed to set file permissions.');
             }
         }
     }
@@ -468,9 +485,11 @@ class Image {
      * Supports various image formats based on the internal image type set within the class.
      *
      * @param bool $return Determines whether to return the image content as a string (true) or to output it directly to the browser (false).
+     *
      * @return string|null Returns the image data as a string if `$return` is true; otherwise, outputs directly and returns null.
      */
-    public function output(bool $return = false): ?string {
+    public function output(bool $return = false): ?string
+    {
         $contents = null;
         if ($return) {
             ob_start();
@@ -478,22 +497,27 @@ class Image {
         switch ($this->get_image_type()) {
             case IMAGETYPE_JPEG:
                 imagejpeg($this->image);
+
                 break;
             case IMAGETYPE_GIF:
                 imagegif($this->image);
+
                 break;
             case IMAGETYPE_WEBP:
                 imagewebp($this->image);
+
                 break;
             case IMAGETYPE_PNG:
                 imagealphablending($this->image, true);
                 imagesavealpha($this->image, true);
                 imagepng($this->image);
+
                 break;
         }
         if ($return) {
             $contents = ob_get_clean();
         }
+
         return $contents;
     }
 
@@ -504,12 +528,15 @@ class Image {
      * It relies on the PHP GD library's imagesx() function to obtain the width of the image resource.
      *
      * @return int The width of the image in pixels, if an image is loaded.
+     *
      * @throws Exception If no image is loaded.
      */
-    public function get_width(): int {
+    public function get_width(): int
+    {
         if ($this->image === null) {
-            throw new Exception("No image is loaded.");
+            throw new Exception('No image is loaded.');
         }
+
         return imagesx($this->image);
     }
 
@@ -520,12 +547,15 @@ class Image {
      * It relies on the PHP GD library's imagesy() function to obtain the height of the image resource.
      *
      * @return int The height of the image in pixels, if an image is loaded.
+     *
      * @throws Exception If no image is loaded, ensuring that the method does not fail silently.
      */
-    public function get_height(): int {
+    public function get_height(): int
+    {
         if ($this->image === null) {
-            throw new Exception("No image is loaded.");
+            throw new Exception('No image is loaded.');
         }
+
         return imagesy($this->image);
     }
 
@@ -536,20 +566,21 @@ class Image {
      * then resizes the image to these new dimensions using the `resize` method.
      *
      * @param int $height The target height to which the image should be resized.
+     *
      * @throws Exception If no image is loaded or if the provided height is non-positive.
-     * @return void
      */
-    public function resize_to_height(int $height): void {
+    public function resize_to_height(int $height): void
+    {
         if ($this->image === null) {
-            throw new Exception("No image is loaded to resize.");
+            throw new Exception('No image is loaded to resize.');
         }
         if ($height <= 0) {
-            throw new Exception("Height must be greater than zero.");
+            throw new Exception('Height must be greater than zero.');
         }
 
         $currentHeight = $this->get_height();
         if ($currentHeight === 0) {  // To prevent division by zero
-            throw new Exception("Loaded image has zero height, cannot resize.");
+            throw new Exception('Loaded image has zero height, cannot resize.');
         }
 
         $ratio = $height / $currentHeight;
@@ -564,20 +595,21 @@ class Image {
      * then resizes the image to these new dimensions using the `resize` method.
      *
      * @param int $width The target width to which the image should be resized.
+     *
      * @throws Exception If no image is loaded or if the provided width is non-positive.
-     * @return void
      */
-    public function resize_to_width(int $width): void {
+    public function resize_to_width(int $width): void
+    {
         if ($this->image === null) {
-            throw new Exception("No image is loaded to resize.");
+            throw new Exception('No image is loaded to resize.');
         }
         if ($width <= 0) {
-            throw new Exception("Width must be greater than zero.");
+            throw new Exception('Width must be greater than zero.');
         }
 
         $currentWidth = $this->get_width();
         if ($currentWidth === 0) {  // To prevent division by zero
-            throw new Exception("Loaded image has zero width, cannot resize.");
+            throw new Exception('Loaded image has zero width, cannot resize.');
         }
 
         $ratio = $width / $currentWidth;
@@ -593,15 +625,16 @@ class Image {
      *
      * @param float $scale The percentage by which to scale the image. A value of 100 maintains the original size,
      *                     values less than 100 reduce the size, and values greater than 100 increase the size.
+     *
      * @throws Exception If no image is loaded or if the scale value is not valid.
-     * @return void
      */
-    public function scale(float $scale): void {
+    public function scale(float $scale): void
+    {
         if ($this->image === null) {
-            throw new Exception("No image is loaded to scale.");
+            throw new Exception('No image is loaded to scale.');
         }
         if ($scale <= 0) {
-            throw new Exception("Scale must be a positive number.");
+            throw new Exception('Scale must be a positive number.');
         }
 
         $width = $this->get_width() * $scale / 100;
@@ -619,15 +652,16 @@ class Image {
      *
      * @param int $width The target width for the image.
      * @param int $height The target height for the image.
+     *
      * @throws Exception If no image is loaded or if width or height are non-positive values.
-     * @return void
      */
-    public function resize_and_crop(int $width, int $height): void {
+    public function resize_and_crop(int $width, int $height): void
+    {
         if ($this->image === null) {
-            throw new Exception("No image is loaded to resize and crop.");
+            throw new Exception('No image is loaded to resize and crop.');
         }
         if ($width <= 0 || $height <= 0) {
-            throw new Exception("Width and height must be positive integers.");
+            throw new Exception('Width and height must be positive integers.');
         }
 
         $target_ratio = $width / $height;
@@ -655,20 +689,21 @@ class Image {
      *
      * @param float $width The target width for the resized image, must be a positive integer.
      * @param float $height The target height for the resized image, must be a positive integer.
+     *
      * @throws Exception Throws an exception if the dimensions provided are invalid or if no image is loaded.
-     * @return void
      */
-    protected function resize(float $width, float $height): void {
+    protected function resize(float $width, float $height): void
+    {
         if ($this->image === null) {
-            throw new Exception("No image is loaded to resize.");
+            throw new Exception('No image is loaded to resize.');
         }
         if ($width <= 0 || $height <= 0) {
-            throw new Exception("Width and height must be positive integers.");
+            throw new Exception('Width and height must be positive integers.');
         }
 
         $new_image = imagecreatetruecolor($width, $height);
         if (!$new_image) {
-            throw new Exception("Failed to create a new image resource.");
+            throw new Exception('Failed to create a new image resource.');
         }
 
         $image_type = $this->get_image_type();
@@ -689,10 +724,11 @@ class Image {
      * This method is critical for preserving the visual integrity of images that require transparency.
      *
      * @param resource|GdImage $resource The image resource to which transparency settings should be applied.
+     *
      * @throws Exception Throws an exception if transparency preparation fails.
-     * @return void
      */
-    private function prepare_transparency($resource): void {
+    private function prepare_transparency($resource): void
+    {
         $image_type = $this->get_image_type();
         if ($image_type === IMAGETYPE_GIF || $image_type === IMAGETYPE_PNG) {
             if ($image_type === IMAGETYPE_GIF) {
@@ -701,7 +737,7 @@ class Image {
                     $transparent_color = imagecolorsforindex($this->image, $transparency);
                     $transparency = imagecolorallocate($resource, $transparent_color['red'], $transparent_color['green'], $transparent_color['blue']);
                     if (!$transparency) {
-                        throw new Exception("Failed to allocate transparency color for GIF image.");
+                        throw new Exception('Failed to allocate transparency color for GIF image.');
                     }
                     imagefill($resource, 0, 0, $transparency);
                     imagecolortransparent($resource, $transparency);
@@ -711,12 +747,12 @@ class Image {
                 imagesavealpha($resource, true);
                 $color = imagecolorallocatealpha($resource, 0, 0, 0, 127);
                 if (!$color) {
-                    throw new Exception("Failed to allocate alpha transparency for PNG image.");
+                    throw new Exception('Failed to allocate alpha transparency for PNG image.');
                 }
                 imagefill($resource, 0, 0, $color);
             }
         } else {
-            throw new Exception("Unsupported image type for transparency preparation.");
+            throw new Exception('Unsupported image type for transparency preparation.');
         }
     }
 
@@ -732,10 +768,11 @@ class Image {
      * @param int $height The desired height of the cropped image.
      * @param string $trim Optional. Determines the part of the image to focus on during cropping.
      *                     Can be 'center' or 'right'. Default is 'center'. If 'left' is provided, it defaults to no offset.
-     * @return void
+     *
      * @throws InvalidArgumentException If the given dimensions are invalid or exceed the original dimensions.
      */
-    public function crop(int $width, int $height, string $trim = 'center'): void {
+    public function crop(int $width, int $height, string $trim = 'center'): void
+    {
         $offset_x = 0;
         $offset_y = 0;
         $current_width = $this->get_width();
@@ -770,33 +807,35 @@ class Image {
      * @return int|null Returns the image type as one of the predefined IMAGETYPE_XXX constants.
      *                  Returns null if the image type is not determined or no image is loaded.
      */
-    protected function get_image_type(): ?int {
+    protected function get_image_type(): ?int
+    {
         return $this->image_type;
     }
 
     /**
-    * Gets the PHP memory limit in bytes.
-    * 
-    * Retrieves and converts the PHP memory_limit configuration value to bytes.
-    * Handles limit values specified with K (Kilobytes), M (Megabytes), or G (Gigabytes) suffixes.
-    * Returns PHP_INT_MAX if memory_limit is set to -1 (unlimited).
-    *
-    * Example values handled:
-    * - "128M" -> 134217728 (bytes)
-    * - "1G" -> 1073741824 (bytes)
-    * - "-1" -> PHP_INT_MAX
-    *
-    * @return int Memory limit in bytes
-    */
-    private function get_memory_limit(): int {
+     * Gets the PHP memory limit in bytes.
+     *
+     * Retrieves and converts the PHP memory_limit configuration value to bytes.
+     * Handles limit values specified with K (Kilobytes), M (Megabytes), or G (Gigabytes) suffixes.
+     * Returns PHP_INT_MAX if memory_limit is set to -1 (unlimited).
+     *
+     * Example values handled:
+     * - "128M" -> 134217728 (bytes)
+     * - "1G" -> 1073741824 (bytes)
+     * - "-1" -> PHP_INT_MAX
+     *
+     * @return int Memory limit in bytes
+     */
+    private function get_memory_limit(): int
+    {
         $memory_limit = ini_get('memory_limit');
         if ($memory_limit === '-1') {
             return PHP_INT_MAX;
         }
-        
+
         $unit = strtolower(substr($memory_limit, -1));
-        $value = (int)substr($memory_limit, 0, -1);
-        
+        $value = (int) substr($memory_limit, 0, -1);
+
         switch ($unit) {
             case 'g':
                 $value *= 1024;
@@ -805,7 +844,7 @@ class Image {
             case 'k':
                 $value *= 1024;
         }
-        
+
         return $value;
     }
 
@@ -815,12 +854,11 @@ class Image {
      * This method releases the memory associated with the image resource
      * stored in this class's instance. It should be invoked when the image is no longer needed,
      * especially in scripts that process multiple or large images, to prevent memory leaks and manage
-     * system resources more efficiently. Failure to call this method in such scenarios can lead to 
+     * system resources more efficiently. Failure to call this method in such scenarios can lead to
      * increased memory usage and possible performance degradation.
-     *
-     * @return void
      */
-    public function destroy(): void {
+    public function destroy(): void
+    {
         if ($this->image !== null) {
             imagedestroy($this->image);
             $this->image = null; // Explicitly unset the image to ensure it's no longer usable.
@@ -845,10 +883,11 @@ class Image {
      *                    - 'tmp_file_width': The current width of the temporary file.
      *                    - 'tmp_file_height': The current height of the temporary file.
      *                    - 'image': The Image object that is being manipulated and saved.
-     * @return void
+     *
      * @throws Exception If saving the image fails due to filesystem errors or invalid parameters.
      */
-    private function save_image(array $data): void {
+    private function save_image(array $data): void
+    {
         $new_file_path = $data['new_file_path'] ?? '';
         $compression = $data['compression'] ?? 100;
         $permissions = $data['permissions'] ?? 0755; // Default changed to a more common permission setting for images
@@ -873,35 +912,38 @@ class Image {
     }
 
     /**
-    * Gets the MIME type header for the currently loaded image.
-    * 
-    * Returns the appropriate MIME type (e.g., 'image/jpeg', 'image/png') for the loaded image.
-    * This MIME type can be used in HTTP Content-Type headers when serving the image.
-    *
-    * @throws InvalidArgumentException If no image has been loaded or image type is not set
-    * @return string The MIME type of the current image (e.g., 'image/jpeg', 'image/png', 'image/gif', 'image/webp')
-    */
-    public function get_header(): string {
+     * Gets the MIME type header for the currently loaded image.
+     *
+     * Returns the appropriate MIME type (e.g., 'image/jpeg', 'image/png') for the loaded image.
+     * This MIME type can be used in HTTP Content-Type headers when serving the image.
+     *
+     * @return string The MIME type of the current image (e.g., 'image/jpeg', 'image/png', 'image/gif', 'image/webp')
+     *
+     * @throws InvalidArgumentException If no image has been loaded or image type is not set
+     */
+    public function get_header(): string
+    {
         if (!$this->image_type) {
-            throw new InvalidArgumentException("No image has been loaded, or image type is unset.");
+            throw new InvalidArgumentException('No image has been loaded, or image type is unset.');
         }
+
         return $this->content_type[$this->image_type];
     }
 
     /**
-    * Validates that a file exists at the specified path.
-    * 
-    * A utility method that checks if a file exists at the given path.
-    * Used for basic file existence validation before attempting file operations.
-    *
-    * @param string $path The filesystem path to check
-    * @throws InvalidArgumentException If no file exists at the specified path
-    * @return void
-    */
-    private function check_file_exists(string $path): void {
+     * Validates that a file exists at the specified path.
+     *
+     * A utility method that checks if a file exists at the given path.
+     * Used for basic file existence validation before attempting file operations.
+     *
+     * @param string $path The filesystem path to check
+     *
+     * @throws InvalidArgumentException If no file exists at the specified path
+     */
+    private function check_file_exists(string $path): void
+    {
         if (!file_exists($path)) {
             throw new InvalidArgumentException("File not found: $path");
         }
     }
-
 }

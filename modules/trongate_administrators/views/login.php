@@ -11,38 +11,38 @@
         <main class="page">
             
             <?php
-            echo form_open($form_location, array('class' => 'login-form'));
-            echo validation_errors('<div class="validation-errors">', '</div>');
-            echo '<div class="form-group">';
-            echo form_label('Username');
-            $username_attr = [
-                'id' => 'username',
-                'placeholder' => 'Username',
-                'autocomplete' => 'off',
-                'required' => true
-            ];
-            echo form_input('username', '', $username_attr);
-            echo '</div>';
+            echo form_open($form_location, ['class' => 'login-form']);
+        echo validation_errors('<div class="validation-errors">', '</div>');
+        echo '<div class="form-group">';
+        echo form_label('Username');
+        $username_attr = [
+            'id' => 'username',
+            'placeholder' => 'Username',
+            'autocomplete' => 'off',
+            'required' => true,
+        ];
+        echo form_input('username', '', $username_attr);
+        echo '</div>';
 
-            echo '<div class="form-group">';
-            echo form_label('Password');
-            $password_attr = [
-                'id' => 'password',
-                'placeholder' => 'Password',
-                'autocomplete' => 'current-password',
-                'required' => true
-            ];
-            echo form_password('password', '', $password_attr);
-            echo '</div>';
- 
-            echo '<label>';
-            echo form_checkbox('remember', 1);
-            echo ' Remember me';
-            echo '</label>';
-           
-            echo form_submit('login', 'Log In');
-            echo form_close();
-            ?>
+        echo '<div class="form-group">';
+        echo form_label('Password');
+        $password_attr = [
+            'id' => 'password',
+            'placeholder' => 'Password',
+            'autocomplete' => 'current-password',
+            'required' => true,
+        ];
+        echo form_password('password', '', $password_attr);
+        echo '</div>';
+
+        echo '<label>';
+        echo form_checkbox('remember', 1);
+        echo ' Remember me';
+        echo '</label>';
+
+        echo form_submit('login', 'Log In');
+        echo form_close();
+        ?>
 
         </main>
     </body>

@@ -9,11 +9,11 @@
         
         <?php
         echo form_open($form_location);
-        echo '<div class="text-center">';
-        echo anchor($cancel_url, 'Cancel', array('class' => 'button alt'));
-        echo form_submit('submit', 'Yes - Delete Now', array('class' => 'danger'));
-        echo form_close();
-        echo '</div>';
-        ?>
+echo '<div class="text-center">';
+echo anchor($cancel_url, 'Cancel', ['class' => 'button alt']);
+echo form_submit('submit', 'Yes - Delete Now', ['class' => 'danger']);
+echo form_close();
+echo '</div>';
+?>
     </div>
 </div>
