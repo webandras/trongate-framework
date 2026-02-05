@@ -35,7 +35,7 @@ final class Modules
         // Check for parent-child module structure if standard path fails
         if (!file_exists($controller_path)) {
             $bits = explode('-', $target_module);
-            if (count($bits) === 2 && strlen($bits[1]) > 0) {
+            if (count($bits) === 2 && $bits[1] !== '') {
                 $parent_module = $bits[0];
                 $child_module = $bits[1];
                 $target_controller = ucfirst($child_module);
@@ -79,7 +79,7 @@ final class Modules
         if (!file_exists($target_controller_path)) {
             $bits = explode('-', $target_module);
 
-            if (count($bits) === 2 && strlen($bits[1]) > 0) {
+            if (count($bits) === 2 && $bits[1] !== '') {
                 $parent_module = $bits[0];
                 $child_module = $bits[1];
                 $target_controller = ucfirst($child_module);

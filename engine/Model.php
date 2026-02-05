@@ -55,7 +55,7 @@ class Model
      *
      * @throws Exception If the property is not valid.
      */
-    public function __get(string $key)
+    public function __get(string $key): mixed
     {
         // Check if it's a cached Db instance (database connection)
         if (isset($this->db_instances[$key])) {
@@ -159,7 +159,7 @@ class Model
     {
         $bits = explode('-', $target_module);
 
-        if (count($bits) === 2 && strlen($bits[1]) > 0) {
+        if (count($bits) === 2 && $bits[1] !== '') {
             $parent_module = strtolower($bits[0]);
             $child_module = strtolower($bits[1]);
             $controller_class = ucfirst($child_module);
@@ -315,7 +315,7 @@ class Model
         if (strpos($module_name, '-') !== false) {
             $bits = explode('-', $module_name);
 
-            if (count($bits) === 2 && strlen($bits[1]) > 0) {
+            if (count($bits) === 2 && $bits[1] !== '') {
                 $parent_module = strtolower($bits[0]);
                 $child_module = strtolower($bits[1]);
                 $model_class_name = ucfirst($child_module) . '_model';

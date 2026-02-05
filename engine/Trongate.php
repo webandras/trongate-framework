@@ -59,7 +59,7 @@ class Trongate
             default => null
         };
 
-        if ($core_instance !== null) {
+        if ($core_instance instanceof \Model) {
             return $this->instances[$key] ??= $core_instance;
         }
 
@@ -140,7 +140,7 @@ class Trongate
     {
         $bits = explode('-', $target_module);
 
-        if (count($bits) === 2 && strlen($bits[1]) > 0) {
+        if (count($bits) === 2 && $bits[1] !== '') {
             $parent_module = strtolower($bits[0]);
             $child_module = strtolower($bits[1]);
             $controller_class = ucfirst($child_module);
@@ -175,11 +175,7 @@ class Trongate
     {
         $return_as_str = $return_as_str ?? false;
 
-        if (isset($data['view_module'])) {
-            $module_name = $data['view_module'];
-        } else {
-            $module_name = strtolower(get_class($this));
-        }
+	    $module_name = isset($data['view_module']) ? $data['view_module'] : strtolower(get_class($this));
 
         $view_path = $this->get_view_path($view, $module_name);
         extract($data);
@@ -190,12 +186,12 @@ class Trongate
             require $view_path;
 
             return ob_get_clean();
-        } else {
-            // Output view file
-            require $view_path;
-
-            return null;
         }
+
+		// Output view file
+	    require $view_path;
+
+		return null;
     }
 
     /**

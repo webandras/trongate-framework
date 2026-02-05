@@ -14,9 +14,9 @@ function truncate_str(string $value, int $max_length): string
 {
     if (strlen($value) <= $max_length) {
         return $value;
-    } else {
-        return substr($value, 0, $max_length) . '...';
     }
+
+	return substr($value, 0, $max_length) . '...';
 }
 
 /**
@@ -33,11 +33,10 @@ function truncate_words(string $value, int $max_words): string
 
     if (count($words) <= $max_words) {
         return $value;
-    } else {
-        $truncated = implode(' ', array_slice($words, 0, $max_words));
-
-        return $truncated . '...';
     }
+
+	$truncated = implode(' ', array_slice($words, 0, $max_words));
+	return $truncated . '...';
 }
 
 /**
@@ -52,12 +51,10 @@ function get_last_part(string $str, string $delimiter = '-'): string
 {
     if (strpos($str, $delimiter) !== false) {
         $parts = explode($delimiter, $str);
-        $last_part = end($parts);
-    } else {
-        $last_part = $str;
+        return end($parts);
     }
 
-    return $last_part;
+    return $str;
 }
 
 /**
@@ -107,17 +104,17 @@ function remove_substr_between(string $start, string $end, string $haystack, boo
         }
 
         return substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
-    } else {
-        while (($start_pos = strpos($haystack, $start)) !== false) {
-            $end_pos = strpos($haystack, $end, $start_pos + strlen($start));
-            if ($end_pos === false) {
-                break;
-            }
-            $haystack = substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
-        }
-
-        return $haystack;
     }
+
+	while (($start_pos = strpos($haystack, $start)) !== false) {
+		$end_pos = strpos($haystack, $end, $start_pos + strlen($start));
+		if ($end_pos === false) {
+			break;
+		}
+
+		$haystack = substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
+	}
+	return $haystack;
 }
 
 /**
@@ -134,7 +131,7 @@ function nice_price(float $num, ?string $currency_symbol = null): string|float
     $nice_price = str_replace('.00', '', $num);
 
     if (isset($currency_symbol)) {
-        $nice_price = $currency_symbol . $nice_price;
+        return $currency_symbol . $nice_price;
     }
 
     return $nice_price;
@@ -153,16 +150,14 @@ function nice_price(float $num, ?string $currency_symbol = null): string|float
  */
 function url_title(string $value, bool $transliteration = true): string
 {
-    if (extension_loaded('intl') && $transliteration === true) {
+    if (extension_loaded('intl') && $transliteration) {
         $transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
         $value = $transliterator->transliterate($value);
     }
     $slug = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
     $slug = preg_replace('~[^\pL\d]+~u', '-', $slug);
     $slug = trim($slug, '- ');
-    $slug = strtolower($slug);
-
-    return $slug;
+	return strtolower($slug);
 }
 
 /**

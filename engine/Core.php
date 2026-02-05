@@ -131,7 +131,7 @@ final class Core
      *
      * @param int $http_response_code The HTTP response code to send
      */
-    private function draw_error_page(int $http_response_code = 404): void
+    private function draw_error_page(int $http_response_code = 404): never
     {
         http_response_code($http_response_code);
 
@@ -208,19 +208,15 @@ final class Core
             $vendor_file_path = $this->sanitize_file_path($vendor_file_path, '../vendor/');
 
             if (file_exists($vendor_file_path)) {
-                if (strpos($vendor_file_path, '.css')) {
-                    $content_type = 'text/css';
-                } else {
-                    $content_type = 'text/plain';
-                }
+	            $content_type = strpos($vendor_file_path, '.css') ? 'text/css' : 'text/plain';
 
                 header('Content-type: ' . $content_type);
                 $contents = file_get_contents($vendor_file_path);
                 echo $contents;
                 exit();
-            } else {
-                exit('Vendor file not found.');
             }
+
+			exit('Vendor file not found.');
         } catch (Exception $e) {
             exit($e->getMessage());
         }
@@ -474,7 +470,7 @@ final class Core
                         };
 
                         // Content Type Validation - Block dangerous content types
-                        if (strpos(strtolower($content_type), 'php') !== false) {
+                        if (stripos($content_type, 'php') !== false) {
                             http_response_code(403);
                             exit('Access denied: forbidden content type');
                         }

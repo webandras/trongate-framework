@@ -17,7 +17,7 @@ if (isset($databases)) {
 }
 
 // Enhanced autoloader - supports both engine classes and module classes
-spl_autoload_register(function ($class_name) {
+spl_autoload_register(function (string $class_name): bool {
     // Priority 1: Check engine directory for core framework classes
     $file = __DIR__ . '/' . $class_name . '.php';
     if (file_exists($file)) {
@@ -51,11 +51,8 @@ function get_segments(): array
     $pseudo_url = rtrim($pseudo_url, '/');
     $bits = explode('/', $pseudo_url);
     $num_bits = count($bits);
-    if ($num_bits > 1) {
-        $num_segments_to_ditch = $num_bits - 1;
-    } else {
-        $num_segments_to_ditch = 0;
-    }
+	$num_segments_to_ditch = $num_bits > 1 ? $num_bits - 1 : 0;
+
     $assumed_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $assumed_url = attempt_custom_routing($assumed_url);
     $data['assumed_url'] = $assumed_url;
@@ -93,7 +90,7 @@ function attempt_custom_routing(string $url): string
     }
     $path = ltrim(parse_url($url, PHP_URL_PATH) ?: '/', '/');
     $base_path = ltrim(parse_url(BASE_URL, PHP_URL_PATH) ?: '/', '/');
-    if ($base_path !== '' && strpos($path, $base_path) === 0) {
+    if (strpos($path, $base_path) === 0) {
         $path = substr($path, strlen($base_path));
     }
     foreach ($routes as [$regex, $dest]) {
@@ -120,11 +117,11 @@ define('SEGMENTS', $data['segments']);
 define('ASSUMED_URL', $data['assumed_url']);
 
 // Helper files - Load after constants are defined
-require_once 'tg_helpers/flashdata_helper.php';
-require_once 'tg_helpers/form_helper.php';
-require_once 'tg_helpers/string_helper.php';
-require_once 'tg_helpers/url_helper.php';
-require_once 'tg_helpers/utilities_helper.php';
+require_once __DIR__ . '/tg_helpers/flashdata_helper.php';
+require_once __DIR__ . '/tg_helpers/form_helper.php';
+require_once __DIR__ . '/tg_helpers/string_helper.php';
+require_once __DIR__ . '/tg_helpers/url_helper.php';
+require_once __DIR__ . '/tg_helpers/utilities_helper.php';
 
 /* --------------------------------------------------------------
  * Interceptor execution (early hooks)

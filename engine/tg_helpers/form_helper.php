@@ -307,9 +307,7 @@ function form_textarea(string $name, ?string $value = null, array $attributes = 
 {
     $attributes['name'] = $name;
 
-    $html = '<textarea' . get_attributes_str($attributes) . '>' . htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8') . '</textarea>';
-
-    return $html;
+	return '<textarea' . get_attributes_str($attributes) . '>' . htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8') . '</textarea>';
 }
 
 /**
@@ -402,9 +400,7 @@ function form_submit(string $name, ?string $value = null, array $attributes = []
     $attributes['name'] = $name;
     $attributes['value'] = $value;
 
-    $html = '<button' . get_attributes_str($attributes) . '>' . $value . '</button>';
-
-    return $html;
+	return '<button' . get_attributes_str($attributes) . '>' . $value . '</button>';
 }
 
 /**
@@ -425,9 +421,7 @@ function form_button(string $name, ?string $value = null, array $attributes = []
     $attributes['name'] = $name;
     $value = $value ?? 'Submit';
 
-    $html = '<button' . get_attributes_str($attributes) . '>' . $value . '</button>';
-
-    return $html;
+    return '<button' . get_attributes_str($attributes) . '>' . $value . '</button>';
 }
 
 /**
@@ -457,9 +451,7 @@ function form_dropdown(string $name, array $options, string|int|null $selected_k
                . htmlspecialchars((string) $option_value, ENT_QUOTES, 'UTF-8') . "</option>\n";
     }
 
-    $html .= '</select>';
-
-    return $html;
+    return $html . '</select>';
 }
 
 /**
@@ -528,8 +520,8 @@ function post(
     if (is_null($field_name) || is_bool($field_name)) {
         $output = $request_data;
 
-        if ($field_name === true || $clean_up === true) {
-            array_walk_recursive($output, function (&$item) {
+        if ($field_name === true || $clean_up) {
+            array_walk_recursive($output, function (&$item): void {
                 if (is_string($item)) {
                     $item = trim(preg_replace('/\s+/', ' ', $item));
                 }
@@ -585,7 +577,7 @@ function post(
         if (is_string($value)) {
             $value = trim(preg_replace('/\s+/', ' ', $value));
         } elseif (is_array($value)) {
-            array_walk_recursive($value, function (&$item) {
+            array_walk_recursive($value, function (&$item): void {
                 if (is_string($item)) {
                     $item = trim(preg_replace('/\s+/', ' ', $item));
                 }
@@ -639,7 +631,7 @@ function validation_errors(string|int|null $first_arg = null, ?string $closing_h
 function json_validation_errors(array $errors, int $status_code): never
 {
     $json_errors = array_map(
-        fn ($field, $messages) => ['field' => $field, 'messages' => $messages],
+        fn ($field, $messages): array => ['field' => $field, 'messages' => $messages],
         array_keys($errors),
         $errors
     );
@@ -669,9 +661,8 @@ function inline_validation_errors(array $errors, string $field): string
     foreach ($errors[$field] as $validation_error) {
         $validation_err_str .= '<div>&#9679; ' . htmlspecialchars($validation_error, ENT_QUOTES, 'UTF-8') . '</div>';
     }
-    $validation_err_str .= '</div>';
 
-    return $validation_err_str;
+    return $validation_err_str . '</div>';
 }
 
 /**

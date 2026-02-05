@@ -9,9 +9,7 @@ declare(strict_types=1);
  */
 function current_url(): string
 {
-    $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
-    return $current_url;
+	return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 }
 
 /**
@@ -53,11 +51,7 @@ function segment(int $num, ?string $var_type = null): mixed
 {
     $segments = SEGMENTS;
 
-    if (isset($segments[$num])) {
-        $value = $segments[$num];
-    } else {
-        $value = '';
-    }
+	$value = isset($segments[$num]) ? $segments[$num] : '';
 
     if (isset($var_type)) {
         settype($value, $var_type);
@@ -100,9 +94,7 @@ function get_num_segments(): int
  */
 function get_last_segment(): string
 {
-    $last_segment = get_last_part(current_url(), '/');
-
-    return $last_segment;
+	return get_last_part(current_url(), '/');
 }
 
 /**
@@ -115,7 +107,7 @@ function get_last_segment(): string
 function redirect(string $target_url): void
 {
     $str = substr($target_url, 0, 4);
-    if ($str != 'http') {
+    if ($str !== 'http') {
         $target_url = BASE_URL . $target_url;
     }
 
@@ -131,12 +123,10 @@ function redirect(string $target_url): void
 function previous_url(): string
 {
     if (isset($_SERVER['HTTP_REFERER'])) {
-        $url = $_SERVER['HTTP_REFERER'];
-    } else {
-        $url = '';
+	    return $_SERVER['HTTP_REFERER'];
     }
 
-    return $url;
+    return '';
 }
 
 /**
@@ -157,13 +147,9 @@ function previous_url(): string
 function anchor(string $url, ?string $text = null, array $attributes = []): string
 {
     // Determine if the URL is absolute or relative
-    if (preg_match('/^(https?:\/\/|\/\/)/i', $url)) {
-        $full_url = $url;
-    } else {
-        $full_url = BASE_URL . $url;
-    }
+	$full_url = preg_match('/^(https?:\/\/|\/\/)/i', $url) ? $url : BASE_URL . $url;
 
-    // Escape the full URL for attribute safety
+	// Escape the full URL for attribute safety
     $escaped_url = htmlspecialchars($full_url, ENT_QUOTES, 'UTF-8');
 
     // Use provided text or fallback to URL
@@ -176,7 +162,5 @@ function anchor(string $url, ?string $text = null, array $attributes = []): stri
         $attr_string .= ' ' . $key . '="' . $escaped_value . '"';
     }
 
-    $tag = '<a href="' . $escaped_url . '"' . $attr_string . '>' . $text_to_use . '</a>';
-
-    return $tag;
+	return '<a href="' . $escaped_url . '"' . $attr_string . '>' . $text_to_use . '</a>';
 }
