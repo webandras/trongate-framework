@@ -13,12 +13,8 @@ final class Image
 {
     /**
      * Holds the GD image resource instance.
-     *
-     * @var resource|GdImage|null
-     *
-     * @phpstan-ignore-next-line
      */
-    private $image;
+    private \GdImage|bool|null $image;
 
     /**
      * Stores the type of the image as one of the PHP IMAGETYPE_XXX constants.
@@ -112,7 +108,7 @@ final class Image
 
         // VALIDATION: EXACTLY match File module's approach
         // Check if files were uploaded
-        if (empty($_FILES)) {
+        if ($_FILES === []) {
             throw new Exception('No file was uploaded');
         }
 
@@ -141,14 +137,12 @@ final class Image
         }
 
         // Create destination directory if it doesn't exist
-        if (!is_dir($destination)) {
-            if (!mkdir($destination, 0755, true)) {
-                throw new Exception("Failed to create destination directory: {$destination}");
-            }
+        if (!is_dir($destination) && !mkdir($destination, 0755, true)) {
+            throw new Exception("Failed to create destination directory: {$destination}");
         }
 
         // Generate file name with duplicate checking
-        if ($make_rand_name === true) {
+        if ($make_rand_name) {
             $extension = pathinfo($uploaded_file['name'], PATHINFO_EXTENSION);
             $base_name = uniqid('img_', true);
             $extension_with_dot = '.' . $extension;
@@ -209,10 +203,8 @@ final class Image
             }
 
             // Create thumbnail directory if it doesn't exist
-            if (!is_dir($thumbnail_base_dir)) {
-                if (!mkdir($thumbnail_base_dir, 0755, true)) {
-                    throw new Exception("Failed to create thumbnail directory: {$thumbnail_base_dir}");
-                }
+            if (!is_dir($thumbnail_base_dir) && !mkdir($thumbnail_base_dir, 0755, true)) {
+                throw new Exception("Failed to create thumbnail directory: {$thumbnail_base_dir}");
             }
 
             // Extract filename parts for thumbnail
@@ -474,10 +466,8 @@ final class Image
                 throw new InvalidArgumentException('Unsupported image type or required properties not set.');
         }
 
-        if ($permissions !== null) {
-            if (!chmod($filename, $permissions)) {
-                throw new RuntimeException('Failed to set file permissions.');
-            }
+        if ($permissions !== null && !chmod($filename, $permissions)) {
+            throw new RuntimeException('Failed to set file permissions.');
         }
     }
 
@@ -727,11 +717,11 @@ final class Image
      * alpha blending is disabled and alpha saving is enabled to maintain transparency in the resultant image.
      * This method is critical for preserving the visual integrity of images that require transparency.
      *
-     * @param resource|GdImage $resource The image resource to which transparency settings should be applied.
+     * @param  GdImage  $resource  |GdImage $resource The image resource to which transparency settings should be applied.
      *
      * @throws Exception Throws an exception if transparency preparation fails.
      */
-    private function prepare_transparency($resource): void
+    private function prepare_transparency(GdImage $resource): void
     {
         $image_type = $this->get_image_type();
         if ($image_type === IMAGETYPE_GIF || $image_type === IMAGETYPE_PNG) {
@@ -773,7 +763,7 @@ final class Image
      * @param string $trim Optional. Determines the part of the image to focus on during cropping.
      *                     Can be 'center' or 'right'. Default is 'center'. If 'left' is provided, it defaults to no offset.
      *
-     * @throws InvalidArgumentException If the given dimensions are invalid or exceed the original dimensions.
+     * @throws InvalidArgumentException|Exception If the given dimensions are invalid or exceed the original dimensions.
      */
     public function crop(int $width, int $height, string $trim = 'center'): void
     {
@@ -782,7 +772,7 @@ final class Image
         $current_width = $this->get_width();
         $current_height = $this->get_height();
 
-        if ($trim != 'left') {
+        if ($trim !== 'left') {
             if ($current_width > $width) {
                 $diff = $current_width - $width;
                 $offset_x = ($trim === 'center') ? $diff / 2 : $diff; // full diff for trim right

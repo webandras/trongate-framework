@@ -80,9 +80,9 @@ final class Db extends Trongate
         if (!isset($GLOBALS['databases'][$db_group])) {
             if ($this->is_dev_mode) {
                 throw new Exception("Database group '{$db_group}' is not configured in /config/database.php");
-            } else {
-                throw new Exception('Configuration error.');
             }
+
+            throw new Exception('Configuration error.');
         }
 
         $config = $GLOBALS['databases'][$db_group];
@@ -110,10 +110,10 @@ final class Db extends Trongate
             $this->error = $e->getMessage();
 
             if ($this->is_dev_mode) {
-                throw new Exception('Database connection failed: ' . $e->getMessage());
-            } else {
-                throw new Exception('Service unavailable.');
+                throw new Exception('Database connection failed: ' . $e->getMessage(), $e->getCode(), $e);
             }
+
+            throw new Exception('Service unavailable.', $e->getCode(), $e);
         }
     }
 
@@ -165,7 +165,7 @@ final class Db extends Trongate
     {
         $this->validate_table_exists($table);
         $set_columns = [];
-        foreach ($data as $key => $value) {
+        foreach (array_keys($data) as $key) {
             $set_columns[] = "`$key` = :$key";
         }
         $set_clause = implode(', ', $set_columns);
@@ -225,7 +225,9 @@ final class Db extends Trongate
 
         if ($return_type === 'object') {
             return $this->stmt->fetchAll(PDO::FETCH_OBJ);
-        } elseif ($return_type === 'array') {
+        }
+
+        if ($return_type === 'array') {
             return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
@@ -258,7 +260,9 @@ final class Db extends Trongate
 
         if ($return_type === 'object') {
             return $this->stmt->fetchAll(PDO::FETCH_OBJ);
-        } elseif ($return_type === 'array') {
+        }
+
+        if ($return_type === 'array') {
             return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
@@ -317,7 +321,7 @@ final class Db extends Trongate
      */
     public function insert_batch(array $records, string $table): int
     {
-        if (empty($records)) {
+        if ($records === []) {
             return 0;
         }
 
@@ -394,7 +398,9 @@ final class Db extends Trongate
 
         if ($return_type === 'object') {
             return $this->stmt->fetchAll(PDO::FETCH_OBJ);
-        } elseif ($return_type === 'array') {
+        }
+
+        if ($return_type === 'array') {
             return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
@@ -427,9 +433,8 @@ final class Db extends Trongate
         }
 
         $this->prepare_and_execute($sql, $data);
-        $item = $this->stmt->fetch(PDO::FETCH_OBJ);
 
-        return $item !== false ? $item : false;
+        return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
 
     /**
@@ -466,9 +471,8 @@ final class Db extends Trongate
         }
 
         $this->prepare_and_execute($sql, $data);
-        $item = $this->stmt->fetch(PDO::FETCH_OBJ);
 
-        return $item !== false ? $item : false;
+        return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
 
     /**
@@ -619,10 +623,10 @@ final class Db extends Trongate
                     "Table '$table' does not exist in database '{$this->dbname}'. " .
                     'Available tables: ' . implode(', ', $this->get_tables())
                 );
-            } else {
-                // Production: Completely generic error
-                throw new RuntimeException('Invalid operation.');
             }
+
+            // Production: Completely generic error
+            throw new RuntimeException('Invalid operation.');
         }
     }
 

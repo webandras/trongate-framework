@@ -27,7 +27,7 @@ final class Trongate_administrators_model extends Model
 
         $rows = $this->db->query_bind($sql, $params, 'object');
 
-        return !empty($rows) ? $rows[0] : false;
+        return empty($rows) ? false : $rows[0];
     }
 
     /**
@@ -403,9 +403,7 @@ final class Trongate_administrators_model extends Model
         $rows = $this->db->query_bind($sql, $params, 'object');
 
         if (!empty($rows)) {
-            $user_obj = $rows[0];
-
-            return $user_obj;
+            return $rows[0];
         }
 
         return false;
@@ -421,7 +419,7 @@ final class Trongate_administrators_model extends Model
         $sql = "SELECT * FROM {$this->table_name} WHERE active = 1 ORDER BY id LIMIT 1";
         $rows = $this->db->query_bind($sql, [], 'object');
 
-        return !empty($rows) ? $rows[0] : false;
+        return empty($rows) ? false : $rows[0];
     }
 
     /**

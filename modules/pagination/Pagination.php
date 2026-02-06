@@ -146,11 +146,7 @@ final class Pagination extends Trongate
     private function build_link(int $page, string $pagination_root, string $label, ?string $aria_label = null): string
     {
         // For page 1, use the root URL without the page number
-        if ($page === 1) {
-            $url = BASE_URL . rtrim($pagination_root, '/');
-        } else {
-            $url = BASE_URL . $pagination_root . $page;
-        }
+        $url = $page === 1 ? BASE_URL . rtrim($pagination_root, '/') : BASE_URL . $pagination_root . $page;
 
         $aria = $aria_label ? ' aria-label="' . htmlspecialchars($aria_label, ENT_QUOTES, 'UTF-8') . '"' : '';
 

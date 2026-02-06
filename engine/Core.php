@@ -111,7 +111,7 @@ final class Core
     {
         $bits = explode('-', $this->current_controller);
 
-        if (count($bits) === 2 && strlen($bits[1]) > 0) {
+        if (count($bits) === 2 && $bits[1] !== '') {
             $parent_module = strtolower($bits[0]);
             $child_module = strtolower($bits[1]);
             $this->current_controller = ucfirst($bits[1]);

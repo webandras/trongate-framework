@@ -73,11 +73,9 @@ final class Pagination_model extends Model
         // Auto-detect pagination_root if not provided
         if ($pagination_data['pagination_root'] === null || $pagination_data['pagination_root'] === '') {
             $pagination_data['pagination_root'] = $this->auto_detect_pagination_root();
-        } else {
+        } elseif (substr($pagination_data['pagination_root'], -1) !== '/') {
             // Ensure provided pagination_root ends with a slash
-            if (substr($pagination_data['pagination_root'], -1) !== '/') {
-                $pagination_data['pagination_root'] .= '/';
-            }
+            $pagination_data['pagination_root'] .= '/';
         }
 
         // Early return if no pagination needed
@@ -123,7 +121,7 @@ final class Pagination_model extends Model
         }
 
         // Check if any required properties are missing or have wrong type
-        if (!empty($required_properties)) {
+        if ($required_properties !== []) {
             $missing_properties = [];
             foreach ($required_properties as $property => $expected_type) {
                 $missing_properties[] = "$property (expected type: $expected_type)";

@@ -259,6 +259,11 @@ final class File_validation extends Trongate
         }
 
         $content = fread($file_handle, 256); // Read first 256 bytes
+
+        if ($content === false) {
+            throw new RuntimeException('Unable to read file content.');
+        }
+
         fclose($file_handle);
 
         // Define dangerous patterns that indicate potential security threats

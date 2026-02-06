@@ -57,7 +57,7 @@ final class File
         $this->validate_upload_path($destination, $upload_to_module, $target_module);
 
         // Get uploaded file
-        if (empty($_FILES)) {
+        if ($_FILES === []) {
             throw new Exception('No file was uploaded');
         }
 
@@ -308,7 +308,6 @@ final class File
      */
     public function download(string $file_path, bool $as_attachment = true): void
     {
-
         // Validate the path to ensure it's allowed based on predefined security rules
         if (!$this->is_path_valid($file_path)) {
             throw new Exception("Access to this file is restricted: $file_path");
@@ -325,7 +324,7 @@ final class File
         }
 
         // Clean all buffering to avoid interference with the file
-        if (ob_get_level()) {
+        if (ob_get_level() !== 0) {
             ob_end_clean();
         }
 
@@ -475,11 +474,7 @@ final class File
             throw new Exception('Upload destination not specified');
         }
 
-        if ($upload_to_module === true) {
-            $target_path = '../modules/' . $target_module . '/' . $destination;
-        } else {
-            $target_path = $destination;
-        }
+        $target_path = $upload_to_module === true ? '../modules/' . $target_module . '/' . $destination : $destination;
 
         if (!is_dir($target_path)) {
             throw new Exception('Invalid upload destination');
@@ -527,8 +522,7 @@ final class File
      */
     private function generate_secure_filename(string $original_name, bool $make_rand_name): array
     {
-
-        if ($make_rand_name === true) {
+        if ($make_rand_name) {
             // Generate random filename, preserve original extension
             $file_info = return_file_info($original_name);
             $file_name = strtolower(make_rand_str(10));

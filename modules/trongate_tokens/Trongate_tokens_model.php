@@ -224,7 +224,7 @@ final class Trongate_tokens_model extends Model
     {
         $tokens = $this->build_token_array($token);
 
-        if (empty($tokens)) {
+        if ($tokens === []) {
             return false;
         }
 
@@ -242,7 +242,7 @@ final class Trongate_tokens_model extends Model
 
         $rows = $this->db->query_bind($sql, $params, 'object');
 
-        return !empty($rows) ? (int) $rows[0]->user_id : false;
+        return empty($rows) ? false : (int) $rows[0]->user_id;
     }
 
     /**
@@ -259,7 +259,7 @@ final class Trongate_tokens_model extends Model
     {
         $tokens = $this->build_token_array($token);
 
-        if (empty($tokens)) {
+        if ($tokens === []) {
             return false;
         }
 
@@ -292,7 +292,7 @@ final class Trongate_tokens_model extends Model
 
         $rows = $this->db->query_bind($sql, $params, 'object');
 
-        return !empty($rows) ? $rows[0] : false;
+        return empty($rows) ? false : $rows[0];
     }
 
     /**

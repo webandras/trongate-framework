@@ -112,7 +112,6 @@ final class Validation extends Trongate
      */
     private function run_validation_test(array $validation_data, $rules = null): void
     {
-
         switch ($validation_data['test_to_run']) {
             case 'required':
                 $this->check_for_required($validation_data);
@@ -170,7 +169,6 @@ final class Validation extends Trongate
      */
     public function run(?array $validation_array = null): bool
     {
-
         $this->csrf_protect();
 
         if (isset($_SESSION['form_submission_errors'])) {
@@ -185,9 +183,9 @@ final class Validation extends Trongate
             $_SESSION['form_submission_errors'] = $this->form_submission_errors;
 
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -197,13 +195,8 @@ final class Validation extends Trongate
      */
     private function process_validation_array(array $validation_array): void
     {
-
         foreach ($validation_array as $key => $value) {
-            if (isset($value['label'])) {
-                $label = $value['label'];
-            } else {
-                $label = str_replace('_', ' ', $key);
-            }
+            $label = isset($value['label']) ? $value['label'] : str_replace('_', ' ', $key);
 
             $posted_value = post($key, true);
             $rules = $this->build_rules_str($value);
@@ -250,9 +243,7 @@ final class Validation extends Trongate
      */
     private function get_tests_to_run(string $rules): array
     {
-        $tests_to_run = explode('|', $rules);
-
-        return $tests_to_run;
+        return explode('|', $rules);
     }
 
     /**
@@ -545,10 +536,9 @@ final class Validation extends Trongate
         $str = substr($string, $pos);
         $str_two = substr($str, strlen($start));
         $second_pos = stripos($str_two, $end);
-        $str_three = substr($str_two, 0, $second_pos);
-        $content = trim($str_three); // Remove whitespaces
+        $str_three = substr($str_two, 0, $second_pos); // Remove whitespaces
 
-        return $content;
+        return trim($str_three);
     }
 
     /**
@@ -561,9 +551,8 @@ final class Validation extends Trongate
     private function get_test_name(string $test_to_run): string
     {
         $pos = stripos($test_to_run, '[');
-        $test_name = substr($test_to_run, 0, $pos);
 
-        return $test_name;
+        return substr($test_to_run, 0, $pos);
     }
 
     /**
@@ -749,7 +738,7 @@ final class Validation extends Trongate
      */
     private function csrf_block_request(): void
     {
-        if (from_trongate_mx() === true) {
+        if (from_trongate_mx()) {
             http_response_code(403);
             // @phpstan-ignore-next-line
             if (strtolower(ENV) === 'dev') {

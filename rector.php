@@ -8,6 +8,7 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/config',
         __DIR__ . '/engine',
+        __DIR__ . '/modules',
     ])
     // uncomment to reach your current PHP version
     ->withPreparedSets(

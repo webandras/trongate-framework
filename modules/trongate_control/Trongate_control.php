@@ -16,7 +16,7 @@ final class Trongate_control extends Trongate
     /**
      * Constructor - ensure dev environment only
      */
-    public function __construct($module_name = null)
+    public function __construct(?string $module_name = null)
     {
         parent::__construct($module_name);
 
@@ -215,9 +215,9 @@ final class Trongate_control extends Trongate
 
         if ($is_safe === true) {
             return '<button onclick="view_sql(\'' . $escaped_file . '\', false)">VIEW SQL</button>';
-        } else {
-            return '<button class="warning" onclick="view_sql(\'' . $escaped_file . '\', true)">SUSPICIOUS!</button>';
         }
+
+        return '<button class="warning" onclick="view_sql(\'' . $escaped_file . '\', true)">SUSPICIOUS!</button>';
     }
 
     /**

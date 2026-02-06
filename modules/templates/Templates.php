@@ -121,9 +121,8 @@ final class Templates extends Trongate
     private function build_js_include_code(string $file): string
     {
         $code = '<script src="' . $file . '"></script>';
-        $code = str_replace('""></script>', '"></script>', $code);
 
-        return $code;
+        return str_replace('""></script>', '"></script>', $code);
     }
 
     /**

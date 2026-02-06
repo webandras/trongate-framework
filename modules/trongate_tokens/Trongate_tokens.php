@@ -79,7 +79,7 @@ final class Trongate_tokens extends Trongate
         }
 
         // Delete tokens from the database
-        if (!empty($tokens_to_delete)) {
+        if ($tokens_to_delete !== []) {
             $this->model->delete_tokens($tokens_to_delete);
         }
 

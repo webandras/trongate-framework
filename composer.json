@@ -6,7 +6,10 @@
             "email": "guland@protonmail.com"
         }
     ],
-    "require": {},
+    "require": {
+      "ext-gd": "*",
+      "ext-pdo": "*"
+    },
     "require-dev": {
         "rector/rector": "^2.3.5",
         "phpstan/phpstan": "^2.1.38",

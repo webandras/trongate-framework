@@ -88,7 +88,7 @@ final class Trongate_administrators extends Trongate
         $my_user_obj = $this->model->get_user_by_token($token);
         $logged_in_user_id = (int) ($my_user_obj->id ?? 0);
 
-        $is_own_account = ($update_id === $logged_in_user_id) ? true : false;
+        $is_own_account = $update_id === $logged_in_user_id;
         $data = $this->model->prepare_for_display($record_data);
         $data['update_id'] = $update_id;
         $data['headline'] = $is_own_account ? 'Your Account Details' : 'Record Details';
@@ -172,7 +172,7 @@ final class Trongate_administrators extends Trongate
 
         $my_user_obj = $this->model->get_user_by_token($token);
         $logged_in_user_id = (int) ($my_user_obj->id ?? 0);
-        $is_own_account = ($update_id === $logged_in_user_id) ? true : false;
+        $is_own_account = $update_id === $logged_in_user_id;
 
         $data['headline'] = $is_own_account ? 'Update Your Password' : 'Update Password';
         $data['cancel_url'] = ($update_id > 0)
@@ -497,7 +497,7 @@ final class Trongate_administrators extends Trongate
 
         $is_mx_request = from_trongate_mx();
 
-        if ($is_mx_request === true) {
+        if ($is_mx_request) {
             http_response_code(200);
             echo $token;
             exit();
@@ -564,7 +564,7 @@ final class Trongate_administrators extends Trongate
         $token = $this->trongate_tokens->attempt_get_valid_token(1);
 
         // Handle API/MX requests
-        if (from_trongate_mx() === true) {
+        if (from_trongate_mx()) {
             http_response_code($token ? 200 : 401);
             echo $token ?: '';
             exit();

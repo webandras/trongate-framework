@@ -7,7 +7,7 @@ parameters:
         - modules/
 
     # Level 10 is the highest level
-    level: 6
+    level: 10
 
     ignoreErrors:
         - '#Access to an undefined property Trongate_tokens_model#'
@@ -23,6 +23,8 @@ parameters:
         - '#return type has no value type specified in iterable type array.#'
         - '#with no value type specified in iterable type array.#'
         - '#type has no value type specified in iterable type array.#'
+        - '#only iterables are supported.#'
+        - '#, mixed given.#'
 
     excludePaths:
         - modules/templates/views/

@@ -191,7 +191,7 @@ class Model
     public function __call(string $method, array $arguments)
     {
         // Get the calling module from the current_module property
-        if (!isset($this->current_module)) {
+        if ($this->current_module === null) {
             throw new Exception('Model class cannot determine the calling module. Please ensure the module name is set.');
         }
 
