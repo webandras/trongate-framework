@@ -7,7 +7,7 @@ parameters:
         - modules/
 
     # Level 10 is the highest level
-    level: 5
+    level: 6
 
     ignoreErrors:
         - '#Access to an undefined property Trongate_tokens_model#'
@@ -20,6 +20,10 @@ parameters:
         - '#Access to an undefined property Pagination::\$model#'
         - '#Access to an undefined property Welcome::\$templates#'
         - '#Constant APPPATH not found.#'
+        - '#return type has no value type specified in iterable type array.#'
+        - '#with no value type specified in iterable type array.#'
+        - '#type has no value type specified in iterable type array.#'
+
     excludePaths:
         - modules/templates/views/
         - modules/pagination/views/

@@ -259,7 +259,7 @@ function out(?string $input, string $output_format = 'html', string $encoding = 
         case 'attribute':
             $result = htmlspecialchars($input, ENT_QUOTES, $encoding);
 
-			// @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
             if ($result === false) {
                 throw new RuntimeException("Failed to encode string with encoding: {$encoding}");
             }
@@ -269,7 +269,7 @@ function out(?string $input, string $output_format = 'html', string $encoding = 
         case 'xml':
             $result = htmlspecialchars($input, ENT_XML1, $encoding);
 
-	        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
             if ($result === false) {
                 throw new RuntimeException("Failed to encode string with encoding: {$encoding}");
             }

@@ -28,15 +28,15 @@ final class Validation extends Trongate
         block_url($this->module_name);
     }
 
-	/**
-	 * Set rules for form field validation.
-	 *
-	 * @param  string  $key  The form field name.
-	 * @param  string  $label  The form field label.
-	 * @param  string  $rules  The validation rules for the field.
-	 *
-	 * @throws Exception
-	 */
+    /**
+     * Set rules for form field validation.
+     *
+     * @param  string  $key  The form field name.
+     * @param  string  $label  The form field label.
+     * @param  string  $rules  The validation rules for the field.
+     *
+     * @throws Exception
+     */
     public function set_rules(string $key, string $label, string $rules): void
     {
         $validation_data['key'] = $key;
@@ -56,7 +56,7 @@ final class Validation extends Trongate
             $this->module('validation-file_validation');
 
             // Delegate all file validation to the file_validation child module
-	        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
             $file_errors = $this->file_validation->validate($key, $label, $rules, $file);
 
             if (!empty($file_errors)) {
@@ -161,13 +161,13 @@ final class Validation extends Trongate
         }
     }
 
-	/**
-	 * Run form validation checks.
-	 *
-	 * @param  array|null  $validation_array  An array containing validation rules (default: null).
-	 *
-	 * @return bool Returns a boolean value if validation completes, null if the script execution is potentially terminated.
-	 */
+    /**
+     * Run form validation checks.
+     *
+     * @param  array|null  $validation_array  An array containing validation rules (default: null).
+     *
+     * @return bool Returns a boolean value if validation completes, null if the script execution is potentially terminated.
+     */
     public function run(?array $validation_array = null): bool
     {
 
@@ -751,7 +751,7 @@ final class Validation extends Trongate
     {
         if (from_trongate_mx() === true) {
             http_response_code(403);
-	        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
             if (strtolower(ENV) === 'dev') {
                 echo 'Trongate\'s CSRF protection has blocked the request. For more details, refer to: https://trongate.io/documentation/read/trongate_mx/trongate-mx-security/csrf-protection ***  This message will NOT be displayed unless ENV is not set to a value of \'DEV\' or \'dev\'';
             }

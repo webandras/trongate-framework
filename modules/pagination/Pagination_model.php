@@ -4,14 +4,14 @@ declare(strict_types=1);
 final class Pagination_model extends Model
 {
     // Required properties with their expected types
-    private static $required_properties = [
+    private static array $required_properties = [
         'total_rows' => 'int',
         'limit' => 'int',
         'record_name_plural' => 'string',
     ];
 
     // Optional properties with their default values and expected types
-    private static $optional_properties = [
+    private static array $optional_properties = [
         'include_showing_statement' => ['default' => false, 'type' => 'bool'],
         'page_num_segment' => ['default' => null, 'type' => 'int'],
         'pagination_root' => ['default' => null, 'type' => 'string'],
@@ -22,7 +22,7 @@ final class Pagination_model extends Model
     ];
 
     // Map PHP types to expected types
-    private static $type_map = [
+    private static array $type_map = [
         'integer' => 'int',
         'string' => 'string',
         'boolean' => 'bool',
@@ -30,7 +30,7 @@ final class Pagination_model extends Model
     ];
 
     // Default settings for pagination HTML output
-    private static $default_settings = [
+    private static array $default_settings = [
         'pagination_open' => '<div class="pagination">',
         'pagination_close' => '</div>',
         'cur_link_open' => '<a class="active">',
@@ -163,7 +163,7 @@ final class Pagination_model extends Model
                 $actual_type = gettype($pagination_data[$property]);
 
                 // Allow null for properties with null default
-	            // @phpstan-ignore-next-line
+                // @phpstan-ignore-next-line
                 if ($pagination_data[$property] === null && $options['default'] === null) {
                     continue;
                 }

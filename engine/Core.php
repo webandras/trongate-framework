@@ -71,7 +71,7 @@ final class Core
         require_once $controller_path;
 
         // Dev environment logic preserved
-	    // @phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         if (strtolower(ENV) === 'dev') {
             $this->attempt_sql_transfer($controller_path);
         }

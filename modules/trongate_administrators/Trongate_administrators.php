@@ -436,7 +436,7 @@ final class Trongate_administrators extends Trongate
         // Redirect to 404 if accessed incorrectly from within the module.
         if (isset($this->secret_login_segment)) {
             if (is_numeric(strpos(current_url(), $this->module_name))) {
-	            // @phpstan-ignore-next-line
+                // @phpstan-ignore-next-line
                 $this->templates->error_404();
                 exit();
             }
@@ -487,7 +487,7 @@ final class Trongate_administrators extends Trongate
 
         if ($token === false) {
             http_response_code(500);
-	        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
             $fail_msg = (ENV === 'dev') ? 'Could not find record with username of: ' . $username : '';
             exit($fail_msg);
         }
@@ -572,7 +572,7 @@ final class Trongate_administrators extends Trongate
 
         // Handle web requests with no valid token
         if ($token === false) {
-	        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
             if (ENV === 'dev') {
                 // DEV: Auto-login as first active user
                 $user_obj = $this->model->get_any_active_user();

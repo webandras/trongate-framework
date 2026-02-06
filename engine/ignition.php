@@ -91,7 +91,7 @@ function attempt_custom_routing(string $url): string
     }
     $path = ltrim(parse_url($url, PHP_URL_PATH) ?: '/', '/');
 
-	// @phpstan-ignore-next-line
+    // @phpstan-ignore-next-line
     $base_path = ltrim(parse_url(BASE_URL, PHP_URL_PATH) ?: '/', '/');
     if (strpos($path, $base_path) === 0) {
         $path = substr($path, strlen($base_path));

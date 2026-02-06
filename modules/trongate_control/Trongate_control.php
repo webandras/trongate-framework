@@ -20,7 +20,7 @@ final class Trongate_control extends Trongate
     {
         parent::__construct($module_name);
 
-	    // @phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         if (strtolower(ENV) !== 'dev') {
             http_response_code(403);
             exit();
@@ -78,7 +78,7 @@ final class Trongate_control extends Trongate
 
         $module_name = $_SESSION['tg_target_module'];
 
-	    // @phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         $module_path = APPPATH . 'modules/' . $module_name . '/';
 
         // Check if it's a child module (parent-child format)
@@ -88,7 +88,7 @@ final class Trongate_control extends Trongate
                 $parent = $bits[0];
                 $child = $bits[1];
 
-	            // @phpstan-ignore-next-line
+                // @phpstan-ignore-next-line
                 $module_path = APPPATH . 'modules/' . $parent . '/' . $child . '/';
             }
         }
@@ -120,6 +120,7 @@ final class Trongate_control extends Trongate
     /**
      * Extract module directory path from URL
      * Example: https://site.com/users/create -> modules/users/
+     *
      * @phpstan-ignore-next-line
      */
     private function get_module_path_from_url(string $url): string
@@ -131,7 +132,7 @@ final class Trongate_control extends Trongate
         // Get first segment (the module name)
         $segments = explode('/', $url_without_base);
 
-	    // @phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         $module_name = isset($segments[0]) ? $segments[0] : '';
 
         if ($module_name === '') {
@@ -139,7 +140,7 @@ final class Trongate_control extends Trongate
         }
 
         // Build module path
-	    // @phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         $module_path = APPPATH . 'modules/' . $module_name . '/';
 
         // Check if it's a child module (parent-child format)
@@ -149,7 +150,7 @@ final class Trongate_control extends Trongate
                 $parent = $bits[0];
                 $child = $bits[1];
 
-	            // @phpstan-ignore-next-line
+                // @phpstan-ignore-next-line
                 $module_path = APPPATH . 'modules/' . $parent . '/' . $child . '/';
             }
         }

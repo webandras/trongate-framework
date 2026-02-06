@@ -24,7 +24,7 @@ final class Db extends Trongate
 
     private PDOStatement|false $stmt;
 
-	// @phpstan-ignore-next-line
+    // @phpstan-ignore-next-line
     private string $error;
 
     private bool $debug = false;
@@ -71,7 +71,7 @@ final class Db extends Trongate
         parent::__construct($module_name);
 
         // Determine environment mode
-	    // @phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         $this->is_dev_mode = defined('ENV') && strtolower(ENV) === 'dev';
 
         // Default to 'default' group if none specified

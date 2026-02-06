@@ -15,6 +15,7 @@ final class Image
      * Holds the GD image resource instance.
      *
      * @var resource|GdImage|null
+     *
      * @phpstan-ignore-next-line
      */
     private $image;
@@ -22,6 +23,7 @@ final class Image
     /**
      * Stores the type of the image as one of the PHP IMAGETYPE_XXX constants.
      * This type determines which MIME type to use when serving the image via HTTP.
+     *
      * @phpstan-ignore-next-line
      */
     private ?int $image_type;
@@ -941,6 +943,7 @@ final class Image
      * @param string $path The filesystem path to check
      *
      * @throws InvalidArgumentException If no file exists at the specified path
+     *
      * @phpstan-ignore-next-line
      */
     private function check_file_exists(string $path): void

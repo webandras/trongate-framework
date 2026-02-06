@@ -158,20 +158,20 @@ class Trongate
         throw new Exception("Module controller not found: {$target_module}");
     }
 
-    /**
-     * Renders a view file with optional data.
-     *
-     * This method can either display the view on the browser or return the generated contents as a string.
-     *
-     * @param string $view The name of the view file to render.
-     * @param array $data Optional. An associative array of data to pass to the view.
-     * @param bool|null $return_as_str Optional. Whether to return the rendered view as a string.
-     *
-     * @return string|null If $return_as_str is true, the rendered view as a string; otherwise, null.
-     *
-     * @throws Exception If the view file is not found.
-     */
-    protected function view(string $view, array $data = [], ?bool $return_as_str = null): ?string
+	/**
+	 * Renders a view file with optional data.
+	 *
+	 * This method can either display the view on the browser or return the generated contents as a string.
+	 *
+	 * @param  string  $view  The name of the view file to render.
+	 * @param  array  $data  Optional. An associative array of data to pass to the view.
+	 * @param  bool|null  $return_as_str  Optional. Whether to return the rendered view as a string.
+	 *
+	 * @return string|false|null If $return_as_str is true, the rendered view as a string; otherwise, null.
+	 *
+	 * @throws Exception If the view file is not found.
+	 */
+    protected function view(string $view, array $data = [], ?bool $return_as_str = null): string|false|null
     {
         $return_as_str = $return_as_str ?? false;
 
