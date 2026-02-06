@@ -191,12 +191,14 @@ final class Validation extends Trongate
     /**
      * Invoke the required form validation tests.
      *
-     * @param array $validation_array The array containing validation rules and data.
+     * @param  array  $validation_array  The array containing validation rules and data.
+     *
+     * @throws Exception
      */
     private function process_validation_array(array $validation_array): void
     {
         foreach ($validation_array as $key => $value) {
-            $label = isset($value['label']) ? $value['label'] : str_replace('_', ' ', $key);
+            $label = $value['label'] ?? str_replace('_', ' ', $key);
 
             $posted_value = post($key, true);
             $rules = $this->build_rules_str($value);
@@ -558,10 +560,12 @@ final class Validation extends Trongate
     /**
      * Check if the value matches another field value.
      *
-     * @param string $key The key of the field being validated.
-     * @param string $label The label of the field being validated.
-     * @param mixed $posted_value The value of the field being validated.
-     * @param string $compare_field The name of the field to compare against.
+     * @param  string  $key  The key of the field being validated.
+     * @param  string  $label  The label of the field being validated.
+     * @param  mixed  $posted_value  The value of the field being validated.
+     * @param  string  $compare_field  The name of the field to compare against.
+     *
+     * @throws Exception
      */
     private function matches(string $key, string $label, $posted_value, string $compare_field): void
     {
@@ -575,10 +579,12 @@ final class Validation extends Trongate
     /**
      * Check if the value differs from another field value.
      *
-     * @param string $key The key of the field being validated.
-     * @param string $label The label of the field being validated.
-     * @param mixed $posted_value The value of the field being validated.
-     * @param string $compare_field The name of the field to compare against.
+     * @param  string  $key  The key of the field being validated.
+     * @param  string  $label  The label of the field being validated.
+     * @param  mixed  $posted_value  The value of the field being validated.
+     * @param  string  $compare_field  The name of the field to compare against.
+     *
+     * @throws Exception
      */
     private function differs(string $key, string $label, $posted_value, string $compare_field): void
     {

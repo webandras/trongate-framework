@@ -192,7 +192,7 @@ function form_open(string $location, array $attributes = []): string
         $extra .= ' ' . htmlspecialchars($key, ENT_QUOTES, 'UTF-8') . '="' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '"';
     }
 
-    if (!filter_var($location, FILTER_VALIDATE_URL) && strpos($location, '/') !== 0) {
+    if (!filter_var($location, FILTER_VALIDATE_URL) && !str_starts_with($location, '/')) {
         $location = BASE_URL . $location;
     }
 
@@ -218,6 +218,8 @@ function form_open_upload(string $location, array $attributes = []): string
  * Generates hidden CSRF token input field and a closing form tag.
  *
  * @return string The HTML closing tag for the form.
+ *
+ * @throws \Random\RandomException
  */
 function form_close(): string
 {
@@ -448,7 +450,7 @@ function form_dropdown(string $name, array $options, string|int|null $selected_k
             $option_attributes['selected'] = 'selected';
         }
         $html .= '    <option' . get_attributes_str($option_attributes) . '>'
-               . htmlspecialchars((string) $option_value, ENT_QUOTES, 'UTF-8') . "</option>\n";
+               . htmlspecialchars($option_value, ENT_QUOTES, 'UTF-8') . "</option>\n";
     }
 
     return $html . '</select>';
@@ -535,7 +537,7 @@ function post(
     $value = '';
 
     // Dot notation
-    if (strpos($field_name, '.') !== false) {
+    if (str_contains($field_name, '.')) {
         $keys  = explode('.', $field_name);
         $level = $request_data;
         foreach ($keys as $key) {
@@ -602,6 +604,7 @@ function post(
  * @param  string|null  $closing_html  Optional HTML to close each error message.
  *
  * @return string|null Returns a string of formatted validation errors or null if no errors are present.
+ *
  * @throws JsonException
  */
 function validation_errors(string|int|null $first_arg = null, ?string $closing_html = null): ?string
@@ -626,8 +629,10 @@ function validation_errors(string|int|null $first_arg = null, ?string $closing_h
 /**
  * Generates JSON-formatted validation errors and sends an HTTP response.
  *
- * @param array $errors The validation errors.
- * @param int $status_code The HTTP status code to send.
+ * @param  array  $errors  The validation errors.
+ * @param  int  $status_code  The HTTP status code to send.
+ *
+ * @throws JsonException
  */
 function json_validation_errors(array $errors, int $status_code): never
 {

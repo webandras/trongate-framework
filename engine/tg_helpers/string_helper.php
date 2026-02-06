@@ -50,7 +50,7 @@ function truncate_words(string $value, int $max_words): string
  */
 function get_last_part(string $str, string $delimiter = '-'): string
 {
-    if (strpos($str, $delimiter) !== false) {
+    if (str_contains($str, $delimiter)) {
         $parts = explode($delimiter, $str);
 
         return end($parts);
@@ -198,7 +198,7 @@ function url_title(string $value, bool $transliteration = true): string
 function sanitize_filename(string $filename, bool $transliteration = true, int $max_length = 200): string
 {
     // Security: Prevent null byte attacks
-    if (strpos($filename, "\0") !== false) {
+    if (str_contains($filename, "\0")) {
         throw new InvalidArgumentException('Filename contains null bytes');
     }
 
@@ -232,7 +232,7 @@ function sanitize_filename(string $filename, bool $transliteration = true, int $
     $clean_extension = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $extension));
 
     // Reconstruct filename
-    return $clean_extension ? "{$clean_basename}.{$clean_extension}" : $clean_basename;
+    return $clean_extension ? "$clean_basename.$clean_extension" : $clean_basename;
 }
 
 /**
@@ -261,7 +261,7 @@ function out(?string $input, string $output_format = 'html', string $encoding = 
 
             // @phpstan-ignore-next-line
             if ($result === false) {
-                throw new RuntimeException("Failed to encode string with encoding: {$encoding}");
+                throw new RuntimeException("Failed to encode string with encoding: $encoding");
             }
 
             return $result;
@@ -271,7 +271,7 @@ function out(?string $input, string $output_format = 'html', string $encoding = 
 
             // @phpstan-ignore-next-line
             if ($result === false) {
-                throw new RuntimeException("Failed to encode string with encoding: {$encoding}");
+                throw new RuntimeException("Failed to encode string with encoding: $encoding");
             }
 
             return $result;
@@ -297,17 +297,19 @@ function out(?string $input, string $output_format = 'html', string $encoding = 
             return $encoded;
 
         default:
-            throw new InvalidArgumentException("Unsupported output format: '{$output_format}'");
+            throw new InvalidArgumentException("Unsupported output format: '$output_format'");
     }
 }
 
 /**
  * Generate a random string of characters.
  *
- * @param int $length (Optional) The length of the random string. Default is 32.
- * @param bool $uppercase (Optional) Whether to use uppercase characters. Default is false.
+ * @param  int  $length  (Optional) The length of the random string. Default is 32.
+ * @param  bool  $uppercase  (Optional) Whether to use uppercase characters. Default is false.
  *
  * @return string The randomly generated string.
+ *
+ * @throws \Random\RandomException
  */
 function make_rand_str(int $length = 32, bool $uppercase = false): string
 {
@@ -384,9 +386,7 @@ function filter_str(string $str, array $allowed_tags = []): string
     $str = preg_replace('/[^\S\r\n]+/', ' ', $str);
 
     // Trim leading and trailing white space
-    $str = trim($str);
-
-    return $str;
+    return trim($str);
 }
 
 /**
@@ -430,7 +430,5 @@ function filter_name(string $name, array $allowed_chars = []): string
     $name = preg_replace('/\s+/', ' ', $name);
 
     // Trim leading and trailing white space
-    $name = trim($name);
-
-    return $name;
+    return trim($name);
 }

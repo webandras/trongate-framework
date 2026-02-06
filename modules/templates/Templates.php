@@ -26,7 +26,9 @@ final class Templates extends Trongate
     /**
      * Display admin theme template with provided data.
      *
-     * @param array $data The data to pass to the template view
+     * @param  array  $data  The data to pass to the template view
+     *
+     * @throws Exception
      */
     public function admin(array $data): void
     {
@@ -40,7 +42,9 @@ final class Templates extends Trongate
      * Display public theme template with provided data.
      * Loads the public template with optional theme variation support.
      *
-     * @param array $data The data to pass to the template view
+     * @param  array  $data  The data to pass to the template view
+     *
+     * @throws Exception
      */
     public function public(array $data): void
     {
@@ -67,10 +71,10 @@ final class Templates extends Trongate
      */
     private function display(string $template_name, array $data = []): void
     {
-        $template_path = __DIR__ . "/views/{$template_name}.php";
+        $template_path = __DIR__ . "/views/$template_name.php";
 
         if (!file_exists($template_path)) {
-            throw new Exception("Template '{$template_name}' not found at {$template_path}");
+            throw new Exception("Template '$template_name' not found at $template_path");
         }
 
         extract($data);
@@ -135,8 +139,7 @@ final class Templates extends Trongate
     private function build_css_include_code(string $file): string
     {
         $code = '<link rel="stylesheet" href="' . $file . '">';
-        $code = str_replace('"">', '">', $code);
 
-        return $code;
+        return str_replace('"">', '">', $code);
     }
 }

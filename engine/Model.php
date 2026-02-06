@@ -79,14 +79,14 @@ class Model
         }
 
         // Not found anywhere - throw helpful error
-        $error_msg = "Undefined property: Model::\${$key}. ";
+        $error_msg = "Undefined property: Model::\$$key. ";
 
         if ($this->is_potential_module($key)) {
-            $error_msg .= "If '{$key}' is a module, call \$this->module('{$key}') before using it. ";
+            $error_msg .= "If '$key' is a module, call \$this->module('$key') before using it. ";
         }
 
         if ($this->is_potential_database_group($key)) {
-            $error_msg .= "If '{$key}' is meant to be a database group, ensure it is configured in /config/database.php";
+            $error_msg .= "If '$key' is meant to be a database group, ensure it is configured in /config/database.php";
         }
 
         throw new Exception($error_msg);
@@ -127,7 +127,7 @@ class Model
         require_once $controller_path;
 
         if (!class_exists($controller_class)) {
-            throw new Exception("Module class not found: {$controller_class}");
+            throw new Exception("Module class not found: $controller_class");
         }
 
         // Create the module instance
@@ -174,7 +174,7 @@ class Model
             }
         }
 
-        throw new Exception("Module controller not found: {$target_module}");
+        throw new Exception("Module controller not found: $target_module");
     }
 
     /**
@@ -209,7 +209,7 @@ class Model
         if (!method_exists($model_instance, $method)) {
             $model_class = ucfirst($module_name) . '_model';
 
-            throw new Exception("Method '{$method}' not found in {$model_class} class.");
+            throw new Exception("Method '$method' not found in $model_class class.");
         }
 
         // Call the method and return the result
@@ -268,7 +268,7 @@ class Model
     {
         // Build the model class name and file path
         // Handle child modules (format: parent-child)
-        if (strpos($module_name, '-') !== false) {
+        if ( str_contains( $module_name, '-' ) ) {
             $bits = explode('-', $module_name);
             if (count($bits) === 2) {
                 $child_module = $bits[1];
@@ -287,7 +287,7 @@ class Model
 
         // Check if the class exists
         if (!class_exists($model_class)) {
-            throw new Exception("Model class '{$model_class}' not found in {$model_path}");
+            throw new Exception("Model class '$model_class' not found in $model_path");
         }
 
         // Instantiate the model and cache it
@@ -312,7 +312,7 @@ class Model
         $possible_paths[] = '../modules/' . $module_name . '/' . $model_class . '.php';
 
         // Priority 2: Child module path (for parent-child module structure)
-        if (strpos($module_name, '-') !== false) {
+        if ( str_contains( $module_name, '-' ) ) {
             $bits = explode('-', $module_name);
 
             if (count($bits) === 2 && $bits[1] !== '') {
@@ -333,6 +333,6 @@ class Model
         // Model file not found
         $attempted_paths = implode("\n- ", $possible_paths);
 
-        throw new Exception("Model file '{$model_class}.php' not found for module '{$module_name}'. Attempted paths:\n- {$attempted_paths}");
+        throw new Exception("Model file '$model_class.php' not found for module '$module_name'. Attempted paths:\n- $attempted_paths");
     }
 }

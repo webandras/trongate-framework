@@ -259,7 +259,7 @@ final class Trongate_administrators extends Trongate
     private function get_back_url(): string
     {
         $previous_url = previous_url();
-        if ($previous_url !== '' && strpos($previous_url, BASE_URL . $this->module_name . '/manage') === 0) {
+        if ($previous_url !== '' && str_starts_with($previous_url, BASE_URL . $this->module_name . '/manage')) {
             return $previous_url;
         }
 
@@ -509,9 +509,11 @@ final class Trongate_administrators extends Trongate
     /**
      * Login validation callback
      *
-     * @param string $submitted_username The username submitted in the login form
+     * @param  string  $submitted_username  The username submitted in the login form
      *
      * @return string|bool True if credentials are valid, error message otherwise
+     *
+     * @throws Exception
      */
     public function login_check(string $submitted_username): string|bool
     {

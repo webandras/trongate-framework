@@ -102,7 +102,7 @@ class Trongate
         require_once $controller_path;
 
         if (!class_exists($controller_class)) {
-            throw new Exception("Module class not found: {$controller_class}");
+            throw new Exception("Module class not found: $controller_class");
         }
 
         // Determine how to instantiate based on class inheritance
@@ -155,7 +155,7 @@ class Trongate
             }
         }
 
-        throw new Exception("Module controller not found: {$target_module}");
+        throw new Exception("Module controller not found: $target_module");
     }
 
 	/**
@@ -175,7 +175,7 @@ class Trongate
     {
         $return_as_str = $return_as_str ?? false;
 
-	    $module_name = isset($data['view_module']) ? $data['view_module'] : strtolower(get_class($this));
+	    $module_name = $data['view_module'] ?? strtolower( get_class( $this ) );
 
         $view_path = $this->get_view_path($view, $module_name);
         extract($data);
@@ -210,17 +210,17 @@ class Trongate
 
         // Priority 1: Child module path (if parent/child modules are set)
         if ($this->parent_module !== '' && $this->child_module !== '') {
-            $possible_paths[] = APPPATH . "modules/{$this->parent_module}/{$this->child_module}/views/{$view}.php";
+            $possible_paths[] = APPPATH . "modules/$this->parent_module/$this->child_module/views/$view.php";
         }
 
         // Priority 2: Standard module path
-        $possible_paths[] = APPPATH . "modules/{$module_name}/views/{$view}.php";
+        $possible_paths[] = APPPATH . "modules/$module_name/views/$view.php";
 
         // Priority 3: Derive module name from URL segment (for parent-child modules)
         $segment_one = segment(1);
-        if (strpos($segment_one, '-') !== false && substr_count($segment_one, '-') === 1) {
+        if ( str_contains( $segment_one, '-' ) && substr_count($segment_one, '-') === 1) {
             $module_name_from_segment = str_replace('-', '/', $segment_one);
-            $possible_paths[] = APPPATH . "modules/{$module_name_from_segment}/views/{$view}.php";
+            $possible_paths[] = APPPATH . "modules/$module_name_from_segment/views/$view.php";
         }
 
         // Check each path in order of priority
@@ -233,7 +233,7 @@ class Trongate
         // No view found - throw exception with helpful error message
         $attempted_paths = implode("\n- ", $possible_paths);
 
-        throw new Exception("View '{$view}' not found. Attempted paths:\n- {$attempted_paths}");
+        throw new Exception("View '$view' not found. Attempted paths:\n- $attempted_paths");
     }
 
     /**

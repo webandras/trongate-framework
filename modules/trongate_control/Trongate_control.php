@@ -45,7 +45,7 @@ final class Trongate_control extends Trongate
         $data['file_list_html'] = $this->build_file_list($files);
         $data['current_url'] = current_url();
         $data['base_url'] = BASE_URL;
-        $data['first_file'] = isset($files[0]) ? $files[0] : '';
+        $data['first_file'] = $files[0] ?? '';
 
         $this->view('main', $data);
     }
@@ -82,7 +82,7 @@ final class Trongate_control extends Trongate
         $module_path = APPPATH . 'modules/' . $module_name . '/';
 
         // Check if it's a child module (parent-child format)
-        if (strpos($module_name, '-') !== false) {
+        if (str_contains($module_name, '-')) {
             $bits = explode('-', $module_name);
             if (count($bits) === 2) {
                 $parent = $bits[0];
@@ -133,7 +133,7 @@ final class Trongate_control extends Trongate
         $segments = explode('/', $url_without_base);
 
         // @phpstan-ignore-next-line
-        $module_name = isset($segments[0]) ? $segments[0] : '';
+        $module_name = $segments[0] ?? '';
 
         if ($module_name === '') {
             return '';
@@ -144,7 +144,7 @@ final class Trongate_control extends Trongate
         $module_path = APPPATH . 'modules/' . $module_name . '/';
 
         // Check if it's a child module (parent-child format)
-        if (strpos($module_name, '-') !== false) {
+        if (str_contains($module_name, '-')) {
             $bits = explode('-', $module_name);
             if (count($bits) === 2) {
                 $parent = $bits[0];
@@ -188,9 +188,7 @@ final class Trongate_control extends Trongate
             $html .= '</li>';
         }
 
-        $html .= '</ul>';
-
-        return $html;
+        return $html . '</ul>';
     }
 
     /**

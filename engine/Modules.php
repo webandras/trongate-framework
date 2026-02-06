@@ -89,7 +89,7 @@ final class Modules
             }
 
             if (!file_exists($target_controller_path)) {
-                throw new Exception("Unable to locate '{$target_module}' module at: {$target_controller_path}");
+                throw new Exception("Unable to locate '$target_module' module at: $target_controller_path");
             }
         }
 

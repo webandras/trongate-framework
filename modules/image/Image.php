@@ -138,7 +138,7 @@ final class Image
 
         // Create destination directory if it doesn't exist
         if (!is_dir($destination) && !mkdir($destination, 0755, true)) {
-            throw new Exception("Failed to create destination directory: {$destination}");
+            throw new Exception("Failed to create destination directory: $destination");
         }
 
         // Generate file name with duplicate checking
@@ -204,7 +204,7 @@ final class Image
 
             // Create thumbnail directory if it doesn't exist
             if (!is_dir($thumbnail_base_dir) && !mkdir($thumbnail_base_dir, 0755, true)) {
-                throw new Exception("Failed to create thumbnail directory: {$thumbnail_base_dir}");
+                throw new Exception("Failed to create thumbnail directory: $thumbnail_base_dir");
             }
 
             // Extract filename parts for thumbnail
@@ -397,7 +397,7 @@ final class Image
 
         $valid_signature = false;
         foreach ($signatures[$image_info[2]] ?? [] as $sig) {
-            if (strpos($file_content, $sig) === 0) {
+            if (str_starts_with($file_content, $sig)) {
                 $valid_signature = true;
 
                 break;

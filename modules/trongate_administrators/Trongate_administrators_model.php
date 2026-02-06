@@ -22,7 +22,7 @@ final class Trongate_administrators_model extends Model
      */
     private function find_one(string $column, $value): object|false
     {
-        $sql = "SELECT * FROM {$this->table_name} WHERE {$column} = :{$column} LIMIT 1";
+        $sql = "SELECT * FROM $this->table_name WHERE $column = :$column LIMIT 1";
         $params = [$column => $value];
 
         $rows = $this->db->query_bind($sql, $params, 'object');
@@ -59,6 +59,8 @@ final class Trongate_administrators_model extends Model
      * This method returns exactly what was posted, no conversions.
      *
      * @return array<string, mixed> Raw POST data
+     *
+     * @throws Exception
      */
     public function get_data_from_post(): array
     {
@@ -304,11 +306,13 @@ final class Trongate_administrators_model extends Model
     /**
      * Log a user in and persist authentication state.
      *
-     * @param int $remember 0 for session-only, 1 for persistent cookie (30 days)
+     * @param  int  $remember  0 for session-only, 1 for persistent cookie (30 days)
      *
      * @return string|bool
      * Returns the generated authentication token on success,
      * or FALSE if the user could not be logged in.
+     *
+     * @throws Exception
      */
     public function log_user_in(string $username, int $remember = 0): string|bool
     {
@@ -416,7 +420,7 @@ final class Trongate_administrators_model extends Model
      */
     public function get_any_active_user(): object|false
     {
-        $sql = "SELECT * FROM {$this->table_name} WHERE active = 1 ORDER BY id LIMIT 1";
+        $sql = "SELECT * FROM $this->table_name WHERE active = 1 ORDER BY id LIMIT 1";
         $rows = $this->db->query_bind($sql, [], 'object');
 
         return empty($rows) ? false : $rows[0];
@@ -432,7 +436,7 @@ final class Trongate_administrators_model extends Model
      */
     public function get_all_paginated(int $limit, int $offset): array
     {
-        $sql = "SELECT * FROM {$this->table_name} ORDER BY id LIMIT :limit OFFSET :offset";
+        $sql = "SELECT * FROM $this->table_name ORDER BY id LIMIT :limit OFFSET :offset";
         $params = [
             'limit' => $limit,
             'offset' => $offset,
@@ -541,7 +545,7 @@ final class Trongate_administrators_model extends Model
     {
         // Create trongate_users entry and get ID
         $trongate_user_data = [
-            'code' => make_rand_str(32),
+            'code' => make_rand_str(),
             'user_level_id' => 1,
         ];
 
@@ -557,9 +561,7 @@ final class Trongate_administrators_model extends Model
         // CRITICAL: Generate random password or require password field
         $data['password'] = $this->hash_password(make_rand_str(16)); // Random password
 
-        $new_record_id = $this->db->insert($data, $this->table_name);
-
-        return $new_record_id;
+        return $this->db->insert($data, $this->table_name);
     }
 
     /**

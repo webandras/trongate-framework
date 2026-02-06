@@ -32,7 +32,7 @@ final class Core
 
         if (strpos(ASSUMED_URL, '/vendor/')) {
             $this->serve_vendor_asset();
-        } elseif (strpos(ASSUMED_URL, MODULE_ASSETS_TRIGGER) === false) {
+        } elseif (!str_contains(ASSUMED_URL, MODULE_ASSETS_TRIGGER)) {
             $this->serve_controller();
         } else {
             $this->serve_module_asset();
@@ -242,7 +242,7 @@ final class Core
                 $file_name = urldecode($file_name);
 
                 // Check for null byte injection attacks
-                if (strpos($target_module, "\0") !== false || strpos($file_name, "\0") !== false) {
+                if (str_contains($target_module, "\0") || str_contains($file_name, "\0")) {
                     http_response_code(400);
                     exit('Invalid request');
                 }
@@ -254,9 +254,9 @@ final class Core
                 }
 
                 // Validate filename - prevent directory traversal in filename itself
-                if (strpos($file_name, '..') !== false ||
-                    strpos($file_name, './') !== false ||
-                    strpos($file_name, '\\') !== false) {
+                if (str_contains($file_name, '..') ||
+                     str_contains($file_name, './') ||
+                     str_contains($file_name, '\\')) {
                     http_response_code(400);
                     exit('Invalid file name');
                 }
@@ -267,9 +267,9 @@ final class Core
                     $segment = urldecode($url_segments[$i]);
 
                     // Validate each directory segment for traversal attempts
-                    if (strpos($segment, '..') !== false ||
-                        strpos($segment, "\0") !== false ||
-                        strpos($segment, '\\') !== false) {
+                    if (str_contains($segment, '..') ||
+                         str_contains($segment, "\0") ||
+                         str_contains($segment, '\\')) {
                         http_response_code(400);
                         exit('Invalid path');
                     }
@@ -327,7 +327,7 @@ final class Core
 
                         // Post-Sanitization Path Validation
                         $real_modules_path = realpath('../modules/');
-                        if (strpos($asset_path, $real_modules_path) !== 0) {
+                        if (!str_starts_with($asset_path, $real_modules_path)) {
                             http_response_code(403);
                             exit('Access denied: path outside modules directory');
                         }
@@ -401,7 +401,7 @@ final class Core
                         }
 
                         // Block hidden files (starting with .)
-                        if (strpos(basename($file_name), '.') === 0) {
+                        if (str_starts_with(basename($file_name), '.')) {
                             http_response_code(403);
                             exit('Access denied: hidden file');
                         }

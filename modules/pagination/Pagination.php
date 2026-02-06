@@ -157,6 +157,8 @@ final class Pagination extends Trongate
      * Generate default CSS for pagination.
      *
      * @return string The CSS code wrapped in style tags
+     *
+     * @throws Exception
      */
     private function get_default_css(): string
     {

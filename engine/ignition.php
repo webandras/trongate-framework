@@ -93,7 +93,7 @@ function attempt_custom_routing(string $url): string
 
     // @phpstan-ignore-next-line
     $base_path = ltrim(parse_url(BASE_URL, PHP_URL_PATH) ?: '/', '/');
-    if (strpos($path, $base_path) === 0) {
+    if (str_starts_with($path, $base_path)) {
         $path = substr($path, strlen($base_path));
     }
     foreach ($routes as [$regex, $dest]) {
@@ -111,7 +111,7 @@ function attempt_custom_routing(string $url): string
 }
 
 // Define core constants
-define('APPPATH', str_replace('\\', '/', dirname(dirname(__FILE__)) . '/'));
+define('APPPATH', str_replace('\\', '/', dirname(__FILE__, 2) . '/'));
 define('REQUEST_TYPE', $_SERVER['REQUEST_METHOD']);
 
 // Process URL and routing
@@ -131,23 +131,23 @@ require_once __DIR__ . '/tg_helpers/utilities_helper.php';
  * -------------------------------------------------------------- */
 if (defined('INTERCEPTORS') && is_array(INTERCEPTORS)) {
     foreach (INTERCEPTORS as $module => $method) {
-        $controller_path = APPPATH . "modules/{$module}/" . ucfirst($module) . '.php';
+        $controller_path = APPPATH . "modules/$module/" . ucfirst($module) . '.php';
 
         if (!is_file($controller_path)) {
-            throw new RuntimeException("Interceptor controller not found: {$controller_path}");
+            throw new RuntimeException("Interceptor controller not found: $controller_path");
         }
 
         require_once $controller_path;
 
         $class = ucfirst($module);
         if (!class_exists($class, false)) {
-            throw new RuntimeException("Interceptor class {$class} not defined");
+            throw new RuntimeException("Interceptor class $class not defined");
         }
 
         $instance = new $class($module);
 
         if (!is_callable([$instance, $method])) {
-            throw new RuntimeException("Interceptor method {$class}::{$method} is not callable");
+            throw new RuntimeException("Interceptor method $class::$method is not callable");
         }
 
         $instance->{$method}();

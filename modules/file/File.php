@@ -247,7 +247,7 @@ final class File
      *
      * @throws Exception If there is an error writing to the file.
      */
-    public function write(string $file_path, $data, bool $append = false): bool
+    public function write(string $file_path, mixed $data, bool $append = false): bool
     {
 
         // Validate the path to ensure it's allowed based on predefined security rules
@@ -474,7 +474,7 @@ final class File
             throw new Exception('Upload destination not specified');
         }
 
-        $target_path = $upload_to_module === true ? '../modules/' . $target_module . '/' . $destination : $destination;
+        $target_path = $upload_to_module ? '../modules/' . $target_module . '/' . $destination : $destination;
 
         if (!is_dir($target_path)) {
             throw new Exception('Invalid upload destination');
@@ -569,19 +569,19 @@ final class File
             // Check if the path is in a restricted directory
             foreach ($restricted_dirs as $dir) {
                 $restricted_real_path = realpath($dir);
-                if ($restricted_real_path && strpos($normalized_path, $restricted_real_path) === 0) {
+                if ($restricted_real_path && str_starts_with($normalized_path, $restricted_real_path)) {
                     return false; // Path is inside a restricted directory
                 }
             }
 
             // Prevent manipulation of any files or directories directly under APPPATH
             $relative_path = str_replace(realpath(APPPATH), '', $normalized_path);
-            if (strpos($relative_path, DIRECTORY_SEPARATOR) === false) {
+            if (!str_contains($relative_path, DIRECTORY_SEPARATOR)) {
                 return false; // Path is directly under the root directory
             }
 
             // Ensure the path is within the application directory to avoid external access
-            if (strpos($normalized_path, realpath(APPPATH)) !== 0) {
+            if (!str_starts_with($normalized_path, realpath(APPPATH))) {
                 return false;
             }
 
@@ -606,19 +606,19 @@ final class File
             // Check if the parent path is in a restricted directory
             foreach ($restricted_dirs as $dir) {
                 $restricted_real_path = realpath($dir);
-                if ($restricted_real_path && strpos($parent_normalized_path, $restricted_real_path) === 0) {
+                if ($restricted_real_path && str_starts_with($parent_normalized_path, $restricted_real_path)) {
                     return false; // Parent path is inside a restricted directory
                 }
             }
 
             // Prevent manipulation of any files or directories directly under APPPATH
             $parent_relative_path = str_replace(realpath(APPPATH), '', $parent_normalized_path);
-            if (strpos($parent_relative_path, DIRECTORY_SEPARATOR) === false) {
+            if (!str_contains($parent_relative_path, DIRECTORY_SEPARATOR)) {
                 return false; // Parent path is directly under the root directory
             }
 
             // Ensure the parent path is within the application directory to avoid external access
-            if (strpos($parent_normalized_path, realpath(APPPATH)) !== 0) {
+            if (!str_starts_with($parent_normalized_path, realpath(APPPATH))) {
                 return false;
             }
 

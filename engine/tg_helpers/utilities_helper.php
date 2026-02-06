@@ -51,7 +51,7 @@ function block_url(string $block_path = ''): void
  *
  * @return void Does not return any value; the output is directly written to the output buffer.
  */
-function json($data, ?bool $kill_script = null): void
+function json(mixed $data, ?bool $kill_script = null): void
 {
     echo '<pre>' . json_encode($data, JSON_PRETTY_PRINT) . '</pre>';
 
@@ -94,7 +94,7 @@ function display(array $data): void
     if (!file_exists($content_view_path)) {
         echo "<div style='color: red; padding: 1rem; border: 2px solid red;'>";
         echo '<h2>View Not Found</h2>';
-        echo "<p>Looking for: <code>{$content_view_path}</code></p>";
+        echo "<p>Looking for: <code>$content_view_path</code></p>";
         echo '</div>';
 
         return;

@@ -51,7 +51,7 @@ function segment(int $num, ?string $var_type = null): mixed
 {
     $segments = SEGMENTS;
 
-    $value = isset($segments[$num]) ? $segments[$num] : '';
+    $value = $segments[$num] ?? '';
 
     if (isset($var_type)) {
         settype($value, $var_type);

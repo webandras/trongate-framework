@@ -25,6 +25,12 @@ parameters:
         - '#type has no value type specified in iterable type array.#'
         - '#only iterables are supported.#'
         - '#, mixed given.#'
+        - '#Cannot access an offset on mixed.#'
+        - '#and mixed results in an error#'
+        - '#Possibly invalid array key type mixed.#'
+        - '#on mixed.#'
+        - '#but returns mixed.#'
+        - '#(mixed)#'
 
     excludePaths:
         - modules/templates/views/

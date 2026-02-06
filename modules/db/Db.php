@@ -79,7 +79,7 @@ final class Db extends Trongate
 
         if (!isset($GLOBALS['databases'][$db_group])) {
             if ($this->is_dev_mode) {
-                throw new Exception("Database group '{$db_group}' is not configured in /config/database.php");
+                throw new Exception("Database group '$db_group' is not configured in /config/database.php");
             }
 
             throw new Exception('Configuration error.');
@@ -221,7 +221,7 @@ final class Db extends Trongate
             $this->show_query($sql, []);
         }
 
-        $this->prepare_and_execute($sql, []);
+        $this->prepare_and_execute($sql);
 
         if ($return_type === 'object') {
             return $this->stmt->fetchAll(PDO::FETCH_OBJ);
@@ -291,7 +291,7 @@ final class Db extends Trongate
             $this->show_query($sql, []);
         }
 
-        $this->prepare_and_execute($sql, []);
+        $this->prepare_and_execute($sql);
         $result = $this->stmt->fetch(PDO::FETCH_ASSOC);
 
         return (int) $result['total'];
@@ -394,7 +394,7 @@ final class Db extends Trongate
             $this->show_query($sql, []);
         }
 
-        $this->prepare_and_execute($sql, []);
+        $this->prepare_and_execute($sql);
 
         if ($return_type === 'object') {
             return $this->stmt->fetchAll(PDO::FETCH_OBJ);
@@ -497,7 +497,7 @@ final class Db extends Trongate
      */
     public function get_where_in(string $table, string $column, array $values, array $options = []): array
     {
-        if (empty($values)) {
+        if ($values === []) {
             return [];
         }
 
@@ -510,7 +510,7 @@ final class Db extends Trongate
         $params = [];
 
         foreach ($values as $index => $value) {
-            $param_name = "vin_{$index}";
+            $param_name = "vin_$index";
             $placeholders[] = ":$param_name";
             $params[$param_name] = $value;
         }
@@ -545,7 +545,7 @@ final class Db extends Trongate
         try {
             $sql = 'SHOW TABLES LIKE :table';
             $stmt = $this->dbh->prepare($sql);
-            $stmt->bindParam(':table', $table, PDO::PARAM_STR);
+            $stmt->bindParam(':table', $table);
             $stmt->execute();
 
             return $stmt->fetch(PDO::FETCH_NUM) !== false;
@@ -620,7 +620,7 @@ final class Db extends Trongate
             if ($this->is_dev_mode) {
                 // Development: Detailed error
                 throw new RuntimeException(
-                    "Table '$table' does not exist in database '{$this->dbname}'. " .
+                    "Table '$table' does not exist in database '$this->dbname'. " .
                     'Available tables: ' . implode(', ', $this->get_tables())
                 );
             }

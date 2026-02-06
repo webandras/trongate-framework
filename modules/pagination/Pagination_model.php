@@ -73,7 +73,7 @@ final class Pagination_model extends Model
         // Auto-detect pagination_root if not provided
         if ($pagination_data['pagination_root'] === null || $pagination_data['pagination_root'] === '') {
             $pagination_data['pagination_root'] = $this->auto_detect_pagination_root();
-        } elseif (substr($pagination_data['pagination_root'], -1) !== '/') {
+        } elseif (!str_ends_with($pagination_data['pagination_root'], '/')) {
             // Ensure provided pagination_root ends with a slash
             $pagination_data['pagination_root'] .= '/';
         }
@@ -254,7 +254,7 @@ final class Pagination_model extends Model
         $pagination_root = str_replace(BASE_URL, '', $base_url);
 
         // Ensure it ends with a slash
-        if (substr($pagination_root, -1) !== '/') {
+        if (!str_ends_with($pagination_root, '/')) {
             $pagination_root .= '/';
         }
 

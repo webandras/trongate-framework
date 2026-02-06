@@ -90,7 +90,7 @@ final class File_validation extends Trongate
         $rules_array = explode('|', $rules);
 
         foreach ($rules_array as $rule) {
-            if (strpos($rule, '[') !== false) {
+            if (str_contains($rule, '[')) {
                 // Rule has parameters in brackets
                 $rule_name = substr($rule, 0, strpos($rule, '['));
                 $rule_value = $this->extract_content($rule, '[', ']');
@@ -116,24 +116,17 @@ final class File_validation extends Trongate
      */
     private function run_validation_check(string $rule_name, string $rule_value, array $file, string $label): string
     {
-        switch ($rule_name) {
-            case 'allowed_types':
-                return $this->check_allowed_types($file['name'], $rule_value, $label);
-
-            case 'max_size':
-                return $this->check_file_size($file['size'], $rule_value, $label);
-
-            case 'max_width':
-            case 'max_height':
-            case 'min_width':
-            case 'min_height':
-            case 'square':
-                return $this->check_image_dimensions($file['tmp_name'], $rule_name, $rule_value, $label);
-
-            default:
-                // Unknown rule - ignore it
-                return '';
-        }
+        return match ($rule_name) {
+            'allowed_types' => $this->check_allowed_types($file['name'], $rule_value, $label),
+            'max_size' => $this->check_file_size($file['size'], $rule_value, $label),
+            'max_width', 'max_height', 'min_width', 'min_height', 'square' => $this->check_image_dimensions(
+                $file['tmp_name'],
+                $rule_name,
+                $rule_value,
+                $label
+            ),
+            default => '',
+        };
     }
 
     /**
