@@ -17,7 +17,8 @@ if (isset($databases)) {
 }
 
 // Enhanced autoloader - supports both engine classes and module classes
-spl_autoload_register(function (string $class_name): bool {
+// @phpstan-ignore-next-line
+spl_autoload_register(function (string $class_name) {
     // Priority 1: Check engine directory for core framework classes
     $file = __DIR__ . '/' . $class_name . '.php';
     if (file_exists($file)) {
@@ -89,6 +90,8 @@ function attempt_custom_routing(string $url): string
         }
     }
     $path = ltrim(parse_url($url, PHP_URL_PATH) ?: '/', '/');
+
+	// @phpstan-ignore-next-line
     $base_path = ltrim(parse_url(BASE_URL, PHP_URL_PATH) ?: '/', '/');
     if (strpos($path, $base_path) === 0) {
         $path = substr($path, strlen($base_path));

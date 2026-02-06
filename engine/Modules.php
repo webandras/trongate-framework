@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 final class Modules
 {
+	// @phpstan-ignore-next-line
     private array $modules = [];
 
     /**

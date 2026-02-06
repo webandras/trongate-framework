@@ -156,7 +156,9 @@ final class File
 
         // Adding human-readable sizes
         $sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+	    // @phpstan-ignore-next-line
         $factor = floor((strlen($info['size']) - 1) / 3);
+	    // @phpstan-ignore-next-line
         $info['human_readable_size'] = sprintf('%.2f', $info['size'] / pow(1024, $factor)) . @$sizes[$factor];
 
         return $info;

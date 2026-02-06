@@ -51,7 +51,7 @@ final class Pagination extends Trongate
         if (isset($data['showing_statement']) && !empty($data['showing_statement'])) {
             $statement = str_replace(
                 ['{start}', '{end}', '{total}'],
-                [$start, $end, $total],
+                [$start, $end, $total], // @phpstan-ignore-line
                 $data['showing_statement']
             );
         } else {

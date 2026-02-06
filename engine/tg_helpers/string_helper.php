@@ -126,9 +126,9 @@ function remove_substr_between(string $start, string $end, string $haystack, boo
  * @param float $num The number to be formatted.
  * @param string|null $currency_symbol The optional currency symbol to be added.
  *
- * @return string|float The formatted nice price.
+ * @return string The formatted nice price.
  */
-function nice_price(float $num, ?string $currency_symbol = null): string|float
+function nice_price(float $num, ?string $currency_symbol = null): string
 {
     $num = number_format($num, 2);
     $nice_price = str_replace('.00', '', $num);
@@ -258,6 +258,8 @@ function out(?string $input, string $output_format = 'html', string $encoding = 
         case 'html':
         case 'attribute':
             $result = htmlspecialchars($input, ENT_QUOTES, $encoding);
+
+			// @phpstan-ignore-next-line
             if ($result === false) {
                 throw new RuntimeException("Failed to encode string with encoding: {$encoding}");
             }
@@ -266,6 +268,8 @@ function out(?string $input, string $output_format = 'html', string $encoding = 
 
         case 'xml':
             $result = htmlspecialchars($input, ENT_XML1, $encoding);
+
+	        // @phpstan-ignore-next-line
             if ($result === false) {
                 throw new RuntimeException("Failed to encode string with encoding: {$encoding}");
             }

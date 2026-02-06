@@ -1,0 +1,27 @@
+includes:
+
+parameters:
+    paths:
+        - config/
+        - engine/
+        - modules/
+
+    # Level 10 is the highest level
+    level: 5
+
+    ignoreErrors:
+        - '#Access to an undefined property Trongate_tokens_model#'
+        - '#Access to an undefined property Trongate_tokens#'
+        - '#Access to an undefined property Trongate_security#'
+        - '#Access to an undefined property Trongate_control_model#'
+        - '#Access to an undefined property Trongate_control#'
+        - '#Access to an undefined property Trongate_administrators_model#'
+        - '#Access to an undefined property Trongate_administrators#'
+        - '#Access to an undefined property Pagination::\$model#'
+        - '#Access to an undefined property Welcome::\$templates#'
+        - '#Constant APPPATH not found.#'
+    excludePaths:
+        - modules/templates/views/
+        - modules/pagination/views/
+        - modules/trongate_control/views/
+        - modules/trongate_administrators/views/

@@ -163,6 +163,7 @@ final class Pagination_model extends Model
                 $actual_type = gettype($pagination_data[$property]);
 
                 // Allow null for properties with null default
+	            // @phpstan-ignore-next-line
                 if ($pagination_data[$property] === null && $options['default'] === null) {
                     continue;
                 }

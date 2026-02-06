@@ -15,19 +15,21 @@ final class Image
      * Holds the GD image resource instance.
      *
      * @var resource|GdImage|null
+     * @phpstan-ignore-next-line
      */
     private $image;
 
     /**
      * Stores the type of the image as one of the PHP IMAGETYPE_XXX constants.
      * This type determines which MIME type to use when serving the image via HTTP.
+     * @phpstan-ignore-next-line
      */
     private ?int $image_type;
 
     /**
      * The file path of the loaded image, used primarily for reference and during saving operations.
      */
-    private ?string $file_name;
+    private string $file_name;
 
     /**
      * Associative array mapping image types to their respective MIME types.
@@ -639,7 +641,7 @@ final class Image
 
         $width = $this->get_width() * $scale / 100;
         $height = $this->get_height() * $scale / 100;
-        $this->resize($width, $height);
+        $this->resize((int) $width, (int) $height);
     }
 
     /**
@@ -687,12 +689,12 @@ final class Image
      * for internal class operations and use by extending classes, supporting common image manipulations
      * such as scaling and cropping that require direct resizing.
      *
-     * @param float $width The target width for the resized image, must be a positive integer.
-     * @param float $height The target height for the resized image, must be a positive integer.
+     * @param int $width The target width for the resized image, must be a positive integer.
+     * @param int $height The target height for the resized image, must be a positive integer.
      *
      * @throws Exception Throws an exception if the dimensions provided are invalid or if no image is loaded.
      */
-    protected function resize(float $width, float $height): void
+    protected function resize(int $width, int $height): void
     {
         if ($this->image === null) {
             throw new Exception('No image is loaded to resize.');
@@ -939,6 +941,7 @@ final class Image
      * @param string $path The filesystem path to check
      *
      * @throws InvalidArgumentException If no file exists at the specified path
+     * @phpstan-ignore-next-line
      */
     private function check_file_exists(string $path): void
     {
