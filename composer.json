@@ -6,9 +6,15 @@
             "email": "guland@protonmail.com"
         }
     ],
+    "config": {
+        "platform": {
+            "php": "8.3"
+        }
+    },
     "require": {
       "ext-gd": "*",
-      "ext-pdo": "*"
+      "ext-pdo": "*",
+      "ext-fileinfo": "*"
     },
     "require-dev": {
         "rector/rector": "^2.3.5",

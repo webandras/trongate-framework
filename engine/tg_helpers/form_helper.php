@@ -598,10 +598,11 @@ function post(
 /**
  * Generates and returns validation error messages in HTML or JSON format.
  *
- * @param string|int|null $first_arg Optional HTML to open each error message, HTTP status code for JSON output, or null.
- * @param string|null $closing_html Optional HTML to close each error message.
+ * @param  string|int|null  $first_arg  Optional HTML to open each error message, HTTP status code for JSON output, or null.
+ * @param  string|null  $closing_html  Optional HTML to close each error message.
  *
  * @return string|null Returns a string of formatted validation errors or null if no errors are present.
+ * @throws JsonException
  */
 function validation_errors(string|int|null $first_arg = null, ?string $closing_html = null): ?string
 {
@@ -612,7 +613,7 @@ function validation_errors(string|int|null $first_arg = null, ?string $closing_h
     $form_submission_errors = $_SESSION['form_submission_errors'];
 
     if (is_int($first_arg) && $first_arg >= 400 && $first_arg <= 499) {
-        return json_validation_errors($form_submission_errors, $first_arg);
+        json_validation_errors($form_submission_errors, $first_arg);
     }
 
     if (isset($first_arg) && !isset($closing_html)) {
