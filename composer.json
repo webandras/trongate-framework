@@ -1,10 +1,5 @@
 {
-    "name": "gulan/trongate-framework",
-    "autoload": {
-        "psr-4": {
-            "Gulan\\TrongateFramework\\": "src/"
-        }
-    },
+    "name": "webandras/trongate-framework",
     "authors": [
         {
             "name": "Gulácsi András",
