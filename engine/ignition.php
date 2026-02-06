@@ -51,7 +51,7 @@ function get_segments(): array
     $pseudo_url = rtrim($pseudo_url, '/');
     $bits = explode('/', $pseudo_url);
     $num_bits = count($bits);
-	$num_segments_to_ditch = $num_bits > 1 ? $num_bits - 1 : 0;
+    $num_segments_to_ditch = $num_bits > 1 ? $num_bits - 1 : 0;
 
     $assumed_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $assumed_url = attempt_custom_routing($assumed_url);

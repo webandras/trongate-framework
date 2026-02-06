@@ -16,7 +16,7 @@ function truncate_str(string $value, int $max_length): string
         return $value;
     }
 
-	return substr($value, 0, $max_length) . '...';
+    return substr($value, 0, $max_length) . '...';
 }
 
 /**
@@ -35,8 +35,9 @@ function truncate_words(string $value, int $max_words): string
         return $value;
     }
 
-	$truncated = implode(' ', array_slice($words, 0, $max_words));
-	return $truncated . '...';
+    $truncated = implode(' ', array_slice($words, 0, $max_words));
+
+    return $truncated . '...';
 }
 
 /**
@@ -51,6 +52,7 @@ function get_last_part(string $str, string $delimiter = '-'): string
 {
     if (strpos($str, $delimiter) !== false) {
         $parts = explode($delimiter, $str);
+
         return end($parts);
     }
 
@@ -106,15 +108,16 @@ function remove_substr_between(string $start, string $end, string $haystack, boo
         return substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
     }
 
-	while (($start_pos = strpos($haystack, $start)) !== false) {
-		$end_pos = strpos($haystack, $end, $start_pos + strlen($start));
-		if ($end_pos === false) {
-			break;
-		}
+    while (($start_pos = strpos($haystack, $start)) !== false) {
+        $end_pos = strpos($haystack, $end, $start_pos + strlen($start));
+        if ($end_pos === false) {
+            break;
+        }
 
-		$haystack = substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
-	}
-	return $haystack;
+        $haystack = substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
+    }
+
+    return $haystack;
 }
 
 /**
@@ -157,7 +160,8 @@ function url_title(string $value, bool $transliteration = true): string
     $slug = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
     $slug = preg_replace('~[^\pL\d]+~u', '-', $slug);
     $slug = trim($slug, '- ');
-	return strtolower($slug);
+
+    return strtolower($slug);
 }
 
 /**

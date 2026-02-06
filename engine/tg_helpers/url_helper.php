@@ -9,7 +9,7 @@ declare(strict_types=1);
  */
 function current_url(): string
 {
-	return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 }
 
 /**
@@ -51,7 +51,7 @@ function segment(int $num, ?string $var_type = null): mixed
 {
     $segments = SEGMENTS;
 
-	$value = isset($segments[$num]) ? $segments[$num] : '';
+    $value = isset($segments[$num]) ? $segments[$num] : '';
 
     if (isset($var_type)) {
         settype($value, $var_type);
@@ -94,7 +94,7 @@ function get_num_segments(): int
  */
 function get_last_segment(): string
 {
-	return get_last_part(current_url(), '/');
+    return get_last_part(current_url(), '/');
 }
 
 /**
@@ -123,7 +123,7 @@ function redirect(string $target_url): void
 function previous_url(): string
 {
     if (isset($_SERVER['HTTP_REFERER'])) {
-	    return $_SERVER['HTTP_REFERER'];
+        return $_SERVER['HTTP_REFERER'];
     }
 
     return '';
@@ -147,9 +147,9 @@ function previous_url(): string
 function anchor(string $url, ?string $text = null, array $attributes = []): string
 {
     // Determine if the URL is absolute or relative
-	$full_url = preg_match('/^(https?:\/\/|\/\/)/i', $url) ? $url : BASE_URL . $url;
+    $full_url = preg_match('/^(https?:\/\/|\/\/)/i', $url) ? $url : BASE_URL . $url;
 
-	// Escape the full URL for attribute safety
+    // Escape the full URL for attribute safety
     $escaped_url = htmlspecialchars($full_url, ENT_QUOTES, 'UTF-8');
 
     // Use provided text or fallback to URL
@@ -162,5 +162,5 @@ function anchor(string $url, ?string $text = null, array $attributes = []): stri
         $attr_string .= ' ' . $key . '="' . $escaped_value . '"';
     }
 
-	return '<a href="' . $escaped_url . '"' . $attr_string . '>' . $text_to_use . '</a>';
+    return '<a href="' . $escaped_url . '"' . $attr_string . '>' . $text_to_use . '</a>';
 }

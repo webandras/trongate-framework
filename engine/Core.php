@@ -208,7 +208,7 @@ final class Core
             $vendor_file_path = $this->sanitize_file_path($vendor_file_path, '../vendor/');
 
             if (file_exists($vendor_file_path)) {
-	            $content_type = strpos($vendor_file_path, '.css') ? 'text/css' : 'text/plain';
+                $content_type = strpos($vendor_file_path, '.css') ? 'text/css' : 'text/plain';
 
                 header('Content-type: ' . $content_type);
                 $contents = file_get_contents($vendor_file_path);
@@ -216,7 +216,7 @@ final class Core
                 exit();
             }
 
-			exit('Vendor file not found.');
+            exit('Vendor file not found.');
         } catch (Exception $e) {
             exit($e->getMessage());
         }

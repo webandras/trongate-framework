@@ -34,8 +34,8 @@ function block_url(string $block_path = ''): void
         }
     } elseif (segment(1) === $target_module && segment(2) === $target_method) {
         // Block specific method
-	    http_response_code(403);
-		exit('403 Forbidden - Direct URL access not permitted');
+        http_response_code(403);
+        exit('403 Forbidden - Direct URL access not permitted');
     }
 }
 
@@ -134,9 +134,9 @@ function return_file_info(string $file_string): array
  */
 function sort_by_property(array &$array, string $property, string $direction = 'asc'): array
 {
-	usort($array, function (array $a, array $b) use ($property, $direction): int {
+    usort($array, function (array $a, array $b) use ($property, $direction): int {
         // Determine the comparison method based on the property type
-		$result = is_string($a[$property]) ? strcasecmp($a[$property], $b[$property]) : $a[$property] <=> $b[$property];
+        $result = is_string($a[$property]) ? strcasecmp($a[$property], $b[$property]) : $a[$property] <=> $b[$property];
 
         return ($direction === 'desc') ? -$result : $result;
     });
@@ -176,5 +176,5 @@ function sort_rows_by_property(array $array, string $property, string $direction
  */
 function from_trongate_mx(): bool
 {
-	return isset($_SERVER['HTTP_TRONGATE_MX_REQUEST']);
+    return isset($_SERVER['HTTP_TRONGATE_MX_REQUEST']);
 }

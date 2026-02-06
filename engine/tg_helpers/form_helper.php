@@ -307,7 +307,7 @@ function form_textarea(string $name, ?string $value = null, array $attributes = 
 {
     $attributes['name'] = $name;
 
-	return '<textarea' . get_attributes_str($attributes) . '>' . htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8') . '</textarea>';
+    return '<textarea' . get_attributes_str($attributes) . '>' . htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8') . '</textarea>';
 }
 
 /**
@@ -400,7 +400,7 @@ function form_submit(string $name, ?string $value = null, array $attributes = []
     $attributes['name'] = $name;
     $attributes['value'] = $value;
 
-	return '<button' . get_attributes_str($attributes) . '>' . $value . '</button>';
+    return '<button' . get_attributes_str($attributes) . '>' . $value . '</button>';
 }
 
 /**
