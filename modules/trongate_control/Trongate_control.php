@@ -225,7 +225,7 @@ final class Trongate_control extends Trongate
     {
         $posted_data = file_get_contents('php://input');
 
-        return json_decode($posted_data);
+        return $posted_data ? json_decode($posted_data) : json_decode('{}');
     }
 
     /**
@@ -236,22 +236,18 @@ final class Trongate_control extends Trongate
         switch ($data->action) {
             case 'viewSql':
                 $this->handle_view_sql($data);
-
                 break;
 
             case 'deleteFile':
                 $this->handle_delete_file($data);
-
                 break;
 
             case 'runSql':
                 $this->handle_run_sql($data);
-
                 break;
 
             case 'checkFinish':
                 $this->handle_check_finish();
-
                 break;
 
             default:

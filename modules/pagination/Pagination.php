@@ -162,6 +162,7 @@ final class Pagination extends Trongate
      */
     private function get_default_css(): string
     {
+        // @phpstan-ignore-next-line
         return $this->view('default_css', [], true);
     }
 }
