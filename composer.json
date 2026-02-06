@@ -13,8 +13,8 @@
     ],
     "require": {},
     "require-dev": {
-        "driftingly/rector-laravel": "^2.0",
-        "larastan/larastan": "^3.3",
+        "rector/rector": "^2.3.5",
+        "phpstan/phpstan": "^2.1.38",
         "laravel/pint": "^1.0"
     }
 }
