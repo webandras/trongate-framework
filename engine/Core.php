@@ -52,14 +52,19 @@ final class Core
         if (isset($segments[1])) {
             $module_with_no_params = explode('?', $segments[1])[0];
             // Security: Ensure module name is only alphanumeric/hyphen/underscore
-            $this->current_module = !empty($module_with_no_params) ? preg_replace('/[^a-z0-9-_]/', '', strtolower($module_with_no_params)) : $this->current_module;
+            $this->current_module = !empty($module_with_no_params)
+                ? preg_replace('/[^a-z0-9-_]/', '', strtolower($module_with_no_params))
+                : $this->current_module;
+
             $this->current_controller = ucfirst($this->current_module);
         }
 
         // Parse and validate method from segments
         if (isset($segments[2])) {
             $method_with_no_params = explode('?', $segments[2])[0];
-            $this->current_method = !empty($method_with_no_params) ? strtolower($method_with_no_params) : $this->current_method;
+            $this->current_method = !empty($method_with_no_params)
+                ? strtolower($method_with_no_params)
+                : $this->current_method;
 
             // Security: Explicitly block methods starting with _ from URL access
             if (str_starts_with($this->current_method, '_')) {
@@ -327,7 +332,7 @@ final class Core
 
                         // Post-Sanitization Path Validation
                         $real_modules_path = realpath('../modules/');
-                        if (!str_starts_with($asset_path, $real_modules_path)) {
+                        if ($real_modules_path === false || !str_starts_with($asset_path, $real_modules_path)) {
                             http_response_code(403);
                             exit('Access denied: path outside modules directory');
                         }
@@ -471,7 +476,7 @@ final class Core
                         };
 
                         // Content Type Validation - Block dangerous content types
-                        if (stripos($content_type, 'php') !== false) {
+                        if ($content_type !== false && stripos($content_type, 'php') !== false) {
                             http_response_code(403);
                             exit('Access denied: forbidden content type');
                         }
@@ -541,7 +546,7 @@ final class Core
             }
 
             // Final Security Verification: Ensure the child path is valid and within bounds
-            if (!$real_path || !str_starts_with($real_path, $real_base_dir)) {
+            if ((!$real_path && !$real_base_dir) || !str_starts_with($real_path, $real_base_dir)) {
                 http_response_code(404);
 
                 throw new Exception('Invalid file path or directory traversal detected.');

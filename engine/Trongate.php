@@ -79,7 +79,6 @@ class Trongate
      */
     protected function module(string $target_module): void
     {
-
         // Don't reload if already loaded
         if (isset($this->loaded_modules[$target_module])) {
             return;

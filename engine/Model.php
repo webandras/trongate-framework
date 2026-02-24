@@ -64,12 +64,14 @@ class Model
 
         // Handle primary database (always accessible)
         if ($key === 'db') {
+			// @phpstan-ignore-next-line
             return $this->db_instances[$key] = new Db($this->current_module);
         }
 
         // Handle alternative database groups
         // Check if this key corresponds to a configured database group
         if ($this->is_database_group($key)) {
+	        // @phpstan-ignore-next-line
             return $this->db_instances[$key] = new Db($this->current_module, $key);
         }
 

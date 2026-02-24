@@ -265,9 +265,14 @@ function get_attributes_str($attributes): string
 
     $attributes_str = '';
     foreach ($attributes as $key => $value) {
-        if ($value === null || $value === false) {
+        if ($value === null) {
             continue;
         }
+
+		if ($value === false) {
+			continue;
+		}
+
         if ($value === true) {
             $attributes_str .= ' ' . htmlspecialchars($key, ENT_QUOTES, 'UTF-8');
         } else {
