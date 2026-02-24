@@ -159,7 +159,7 @@ final class Core
      * Instantiates the controller class with the module name and executes the
      * requested method. If the method requires arguments that the framework
      * does not provide, a 403 response is returned matching block_url() behavior.
-     * 
+     *
      * ARCHITECTURE:
      * Controllers extending Trongate receive the module name via constructor parameter.
      * They must call parent::__construct($module_name) to initialize framework features.
@@ -168,8 +168,6 @@ final class Core
      * Near-zero overhead - direct instantiation and method invocation. The try-catch
      * adds no cost to the normal execution path; it only activates when a method
      * requiring arguments is invoked directly via URL.
-     * 
-     * @return void
      */
     private function invoke_controller_method(): void
     {
@@ -181,7 +179,7 @@ final class Core
                 $controller_instance->{$this->current_method}();
             } catch (\ArgumentCountError) {
                 http_response_code(403);
-                die('403 Forbidden - Direct URL access not permitted');
+                exit('403 Forbidden - Direct URL access not permitted');
             }
         } else {
             $this->draw_error_page();

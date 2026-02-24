@@ -269,9 +269,9 @@ function get_attributes_str($attributes): string
             continue;
         }
 
-		if ($value === false) {
-			continue;
-		}
+        if ($value === false) {
+            continue;
+        }
 
         if ($value === true) {
             $attributes_str .= ' ' . htmlspecialchars($key, ENT_QUOTES, 'UTF-8');

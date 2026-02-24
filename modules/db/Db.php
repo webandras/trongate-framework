@@ -542,7 +542,9 @@ final class Db extends Trongate
      * value to 1.
      *
      * @param string $table_name The name of the table to resequence IDs for.
+     *
      * @return bool True upon successful resequencing, false otherwise.
+     *
      * @throws Exception If the operation fails.
      *
      * @note This method should be used with caution and may produce undesired consequences.
@@ -552,12 +554,13 @@ final class Db extends Trongate
      *       before applying it to a production system. Additionally, make sure to take
      *       proper backups of your data before executing this operation.
      */
-    public function resequence_ids(string $table_name): bool {
-
+    public function resequence_ids(string $table_name): bool
+    {
         $num_rows = $this->count($table_name);
         if ($num_rows === 0) {
-            $sql = 'ALTER TABLE '.$table_name.' AUTO_INCREMENT = 1';
+            $sql = 'ALTER TABLE ' . $table_name . ' AUTO_INCREMENT = 1';
             $this->query($sql);
+
             return true;
         }
 
@@ -576,6 +579,7 @@ final class Db extends Trongate
                 $this->dbh->exec("ALTER TABLE $table_name AUTO_INCREMENT = 1");
                 // Commit transaction and exit
                 $this->dbh->commit();
+
                 return true;
             }
 
@@ -601,7 +605,7 @@ final class Db extends Trongate
             // Commit transaction
             $this->dbh->commit();
 
-            $sql = 'ALTER TABLE '.$table_name.' AUTO_INCREMENT = 1';
+            $sql = 'ALTER TABLE ' . $table_name . ' AUTO_INCREMENT = 1';
             $this->query($sql);
 
             // Return true upon successful resequencing
