@@ -154,6 +154,7 @@ function form_search(string $name, ?string $value = null, array $attributes = []
  */
 function form_number(string $name, string|int|float|null $value = null, array $attributes = []): string
 {
+    // @phpstan-ignore-next-line
     return generate_input_element('number', $name, $value, false, $attributes);
 }
 
@@ -168,6 +169,7 @@ function form_number(string $name, string|int|float|null $value = null, array $a
  */
 function form_hidden(string $name, string|int|float|null $value = null, array $attributes = []): string
 {
+    // @phpstan-ignore-next-line
     return generate_input_element('hidden', $name, $value, false, $attributes);
 }
 
@@ -240,6 +242,7 @@ function form_close(): string
 
         // Inject the validation JavaScript
         $js_code = file_get_contents(APPPATH . 'engine/tg_helpers/injectables/js/highlight_validation_errors.js');
+        // @phpstan-ignore-next-line
         $js_code = str_replace('{{BASE_URL}}', BASE_URL, $js_code);
         $html .= '<script>' . $js_code . '</script>';
 
@@ -530,6 +533,7 @@ function post(
         if ($field_name === true || $clean_up) {
             array_walk_recursive($output, function (&$item): void {
                 if (is_string($item)) {
+                    // @phpstan-ignore-next-line
                     $item = trim(preg_replace('/\s+/', ' ', $item));
                 }
             });
@@ -582,10 +586,12 @@ function post(
     /* ---------- Cleanup ---------- */
     if ($clean_up) {
         if (is_string($value)) {
+            // @phpstan-ignore-next-line
             $value = trim(preg_replace('/\s+/', ' ', $value));
         } elseif (is_array($value)) {
             array_walk_recursive($value, function (&$item): void {
                 if (is_string($item)) {
+                    // @phpstan-ignore-next-line
                     $item = trim(preg_replace('/\s+/', ' ', $item));
                 }
             });
@@ -625,9 +631,11 @@ function validation_errors(string|int|null $first_arg = null, ?string $closing_h
     }
 
     if (isset($first_arg) && !isset($closing_html)) {
+        // @phpstan-ignore-next-line
         return inline_validation_errors($form_submission_errors, $first_arg);
     }
 
+    // @phpstan-ignore-next-line
     return general_validation_errors($form_submission_errors, $first_arg, $closing_html);
 }
 

@@ -613,6 +613,7 @@ final class Db extends Trongate
         } catch (Exception $e) {
             // Rollback transaction in case of error
             $this->dbh->rollBack();
+
             throw $e;
         }
     }

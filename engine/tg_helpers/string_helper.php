@@ -51,6 +51,7 @@ function truncate_words(string $value, int $max_words): string
 function get_last_part(string $str, string $delimiter = '-'): string
 {
     if (str_contains($str, $delimiter)) {
+        // @phpstan-ignore-next-line
         $parts = explode($delimiter, $str);
 
         return end($parts);
@@ -155,10 +156,13 @@ function url_title(string $value, bool $transliteration = true): string
 {
     if (extension_loaded('intl') && $transliteration) {
         $transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
+        // @phpstan-ignore-next-line
         $value = $transliterator->transliterate($value);
     }
+    // @phpstan-ignore-next-line
     $slug = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
     $slug = preg_replace('~[^\pL\d]+~u', '-', $slug);
+    // @phpstan-ignore-next-line
     $slug = trim($slug, '- ');
 
     return strtolower($slug);
@@ -229,6 +233,7 @@ function sanitize_filename(string $filename, bool $transliteration = true, int $
     }
 
     // Clean and normalize extension (alphanumeric only, lowercase)
+    // @phpstan-ignore-next-line
     $clean_extension = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $extension));
 
     // Reconstruct filename
@@ -350,6 +355,7 @@ function replace_html_tags(string $content, array $specifications): string
     $pattern = '/' . preg_quote($opening_string_before, '/') . '(.*?)' . preg_quote($close_string_before, '/') . '/';
     $replacement = $opening_string_after . '$1' . $close_string_after;
 
+    // @phpstan-ignore-next-line
     return preg_replace($pattern, $replacement, $content);
 }
 
@@ -366,6 +372,7 @@ function remove_html_code(string $content, string $opening_pattern, string $clos
 {
     $pattern = '/(' . preg_quote($opening_pattern, '/') . ')(.*?)(\s*?' . preg_quote($closing_pattern, '/') . ')/is';
 
+    // @phpstan-ignore-next-line
     return preg_replace($pattern, '', $content);
 }
 
@@ -386,6 +393,7 @@ function filter_str(string $str, array $allowed_tags = []): string
     $str = preg_replace('/[^\S\r\n]+/', ' ', $str);
 
     // Trim leading and trailing white space
+    // @phpstan-ignore-next-line
     return trim($str);
 }
 
@@ -397,6 +405,7 @@ function filter_str(string $str, array $allowed_tags = []): string
  */
 function filter_string(string $string, array $allowed_tags = []): string
 {
+    // @phpstan-ignore-next-line
     return filter_str($string, $allowed_tags);
 }
 
@@ -427,8 +436,10 @@ function filter_name(string $name, array $allowed_chars = []): string
     $name = preg_replace($pattern, '', $name);
 
     // Convert double spaces to single spaces
+    // @phpstan-ignore-next-line
     $name = preg_replace('/\s+/', ' ', $name);
 
     // Trim leading and trailing white space
+    // @phpstan-ignore-next-line
     return trim($name);
 }

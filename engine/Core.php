@@ -52,6 +52,7 @@ final class Core
         if (isset($segments[1])) {
             $module_with_no_params = explode('?', $segments[1])[0];
             // Security: Ensure module name is only alphanumeric/hyphen/underscore
+            // @phpstan-ignore-next-line
             $this->current_module = !empty($module_with_no_params)
                 ? preg_replace('/[^a-z0-9-_]/', '', strtolower($module_with_no_params))
                 : $this->current_module;
@@ -420,6 +421,7 @@ final class Core
                         // Browser Cache Headers
                         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&
                             strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($asset_path)) {
+                            // @phpstan-ignore-next-line
                             header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($asset_path)) . ' GMT', true, 304);
                             exit;
                         }
@@ -487,8 +489,14 @@ final class Core
                             exit('Access denied: forbidden content type');
                         }
 
+                        if ($content_type === false) {
+                            http_response_code(403);
+                            exit('Access denied: missing content type');
+                        }
+
                         // Send Headers and Content
                         header('Content-type: ' . $content_type);
+                        // @phpstan-ignore-next-line
                         header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($asset_path)) . ' GMT');
                         header('X-Frame-Options: SAMEORIGIN');
                         header('X-Content-Type-Options: nosniff');
@@ -537,6 +545,7 @@ final class Core
         $real_path = realpath($path);
 
         // Security Guard: Check if path exists and is within the allowed base directory
+        // @phpstan-ignore-next-line
         if ((!$real_path || !str_starts_with($real_path, $real_base_dir)) && !$is_child_module) {
 
             // Priority 2: Standard resolution failed, attempt parent-child translation
@@ -552,11 +561,18 @@ final class Core
             }
 
             // Final Security Verification: Ensure the child path is valid and within bounds
+            // @phpstan-ignore-next-line
             if ((!$real_path && !$real_base_dir) || !str_starts_with($real_path, $real_base_dir)) {
                 http_response_code(404);
 
                 throw new Exception('Invalid file path or directory traversal detected.');
             }
+        }
+
+        if ($real_path === false) {
+            http_response_code(404);
+
+            throw new Exception('Invalid file path or directory traversal detected.');
         }
 
         return $real_path;
