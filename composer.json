@@ -12,9 +12,10 @@
         }
     },
     "require": {
-      "ext-gd": "*",
-      "ext-pdo": "*",
-      "ext-fileinfo": "*"
+        "ext-gd": "*",
+        "ext-pdo": "*",
+        "ext-fileinfo": "*",
+        "illuminate/database": "^12.53"
     },
     "require-dev": {
         "rector/rector": "^2.3.5",
