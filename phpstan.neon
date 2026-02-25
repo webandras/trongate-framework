@@ -10,30 +10,8 @@ parameters:
     level: 10
 
     ignoreErrors:
-        - '#Access to an undefined property Trongate_tokens_model#'
-        - '#Access to an undefined property Trongate_tokens#'
-        - '#Access to an undefined property Trongate_security#'
-        - '#Access to an undefined property Trongate_control_model#'
-        - '#Access to an undefined property Trongate_control#'
-        - '#Access to an undefined property Trongate_administrators_model#'
-        - '#Access to an undefined property Trongate_administrators#'
-        - '#Access to an undefined property Pagination::\$model#'
-        - '#Access to an undefined property Welcome::\$templates#'
-        - '#Constant APPPATH not found.#'
-        - '#return type has no value type specified in iterable type array.#'
         - '#with no value type specified in iterable type array.#'
-        - '#type has no value type specified in iterable type array.#'
-        - '#only iterables are supported.#'
-        - '#, mixed given.#'
-        - '#Cannot access an offset on mixed.#'
-        - '#and mixed results in an error#'
-        - '#Possibly invalid array key type mixed.#'
-        - '#on mixed.#'
-        - '#but returns mixed.#'
         - '#(mixed)#'
 
     excludePaths:
         - modules/templates/views/
-        - modules/pagination/views/
-        - modules/trongate_control/views/
-        - modules/trongate_administrators/views/
