@@ -15,7 +15,8 @@
         "ext-gd": "*",
         "ext-pdo": "*",
         "ext-fileinfo": "*",
-        "illuminate/database": "^12.53"
+        "illuminate/database": "^12.53",
+        "kint-php/kint": "^6.1"
     },
     "require-dev": {
         "rector/rector": "^2.3.5",
