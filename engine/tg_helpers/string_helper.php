@@ -334,7 +334,7 @@ function make_rand_str(int $length = 32, bool $uppercase = false): string
  * Convert HTML content based on given specifications.
  *
  * @param string $content The original HTML content to be converted.
- * @param array $specifications An array containing specifications for conversion.
+ * @param array<mixed> $specifications An array containing specifications for conversion.
  *                             Should include opening and closing strings.
  *                             Example: [
  *                                 'opening_string_before' => '<span class="whatever">',
@@ -399,6 +399,8 @@ function filter_str(string $str, array $allowed_tags = []): string
 
 /**
  * Alias for filter_str function for backward compatibility.
+ *
+ * @param array<mixed> $allowed_tags
  *
  * @deprecated This function is deprecated and will be removed from the Trongate framework on June 3, 2026.
  * Developers are encouraged to globally replace instances of 'filter_string(' with 'filter_str(' throughout their site or application.

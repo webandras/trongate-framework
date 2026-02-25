@@ -171,7 +171,7 @@ class Trongate
 	 * This method can either display the view on the browser or return the generated contents as a string.
 	 *
 	 * @param  string  $view  The name of the view file to render.
-	 * @param  array  $data  Optional. An associative array of data to pass to the view.
+	 * @param  array<mixed>  $data  Optional. An associative array of data to pass to the view.
 	 * @param  bool|null  $return_as_str  Optional. Whether to return the rendered view as a string.
 	 *
 	 * @return string|false|null If $return_as_str is true, the rendered view as a string; otherwise, null.

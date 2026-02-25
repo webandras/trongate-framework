@@ -73,7 +73,7 @@ function ip_address(): string
 /**
  * Display content view within a template
  *
- * @param array $data Data containing view_module and view_file
+ * @param array<mixed> $data Data containing view_module and view_file
  */
 function display(array $data): void
 {

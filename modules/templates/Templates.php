@@ -26,7 +26,7 @@ final class Templates extends Trongate
     /**
      * Display admin theme template with provided data.
      *
-     * @param  array  $data  The data to pass to the template view
+     * @param  array<mixed>  $data  The data to pass to the template view
      *
      * @throws Exception
      */
@@ -42,7 +42,7 @@ final class Templates extends Trongate
      * Display public theme template with provided data.
      * Loads the public template with optional theme variation support.
      *
-     * @param  array  $data  The data to pass to the template view
+     * @param  array<mixed>  $data  The data to pass to the template view
      *
      * @throws Exception
      */
@@ -65,7 +65,7 @@ final class Templates extends Trongate
      * Display a template file from this module.
      *
      * @param string $template_name The name of the template file (without .php extension)
-     * @param array $data Associative array of data to extract into template scope
+     * @param array<mixed> $data Associative array of data to extract into template scope
      *
      * @throws Exception If template file is not found
      */

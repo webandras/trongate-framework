@@ -192,7 +192,7 @@ class Model
      * Automatically loads the appropriate <Module>_model.php file and forwards the method call.
      *
      * @param string $method The name of the method being called.
-     * @param array $arguments The arguments passed to the method.
+     * @param array<mixed> $arguments The arguments passed to the method.
      *
      * @return mixed The result of the method call.
      *

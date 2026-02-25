@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value of the input element. Default is null.
  * @param bool|string|null $checked Whether the input element should be checked (for radio/checkbox). Default is false.
- * @param array $attributes An associative array of HTML attributes for the input. Default is empty array.
+ * @param array<mixed> $attributes An associative array of HTML attributes for the input. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -40,7 +40,7 @@ function generate_input_element(string $type, string $name, ?string $value = nul
  * @param string $name The name attribute for the input element.
  * @param string|bool|int $value The value attribute for the input element. Defaults to '1'.
  * @param mixed $checked Whether the checkbox should be checked. Accepts true, 'true', 1, '1', 'on', etc.
- * @param array $attributes Additional attributes for the input element as an associative array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array.
  *
  * @return string The generated HTML input element.
  *
@@ -67,7 +67,7 @@ function form_checkbox(string $name, string|bool|int $value = '1', mixed $checke
  * @param string $name The name attribute for the input element.
  * @param string|bool|int $value The value attribute for the input element.
  * @param mixed $checked Whether the radio button should be checked. Accepts true, 'true', 1, '1', 'on', etc.
- * @param array $attributes Additional attributes for the input element as an associative array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array.
  *
  * @return string The generated HTML input element.
  *
@@ -92,7 +92,7 @@ function form_radio(string $name, string|bool|int $value = '', mixed $checked = 
  *
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value attribute for the input element. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -106,7 +106,7 @@ function form_input(string $name, ?string $value = null, array $attributes = [])
  *
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value attribute for the input element. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -120,7 +120,7 @@ function form_email(string $name, ?string $value = null, array $attributes = [])
  *
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value attribute for the input element. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -134,7 +134,7 @@ function form_password(string $name, ?string $value = null, array $attributes = 
  *
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value attribute for the input element. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -148,7 +148,7 @@ function form_search(string $name, ?string $value = null, array $attributes = []
  *
  * @param string $name The name attribute for the input element.
  * @param string|int|float|null $value The value attribute for the input element. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -163,7 +163,7 @@ function form_number(string $name, string|int|float|null $value = null, array $a
  *
  * @param string $name The name attribute for the input element.
  * @param string|int|float|null $value The value attribute for the input element. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -177,7 +177,7 @@ function form_hidden(string $name, string|int|float|null $value = null, array $a
  * Generate the opening tag for an HTML form.
  *
  * @param string $location The URL to which the form will be submitted.
- * @param array $attributes An optional array of HTML attributes for the form.
+ * @param array<mixed> $attributes An optional array of HTML attributes for the form.
  *
  * @return string The HTML opening tag for the form.
  */
@@ -205,7 +205,7 @@ function form_open(string $location, array $attributes = []): string
  * Generate the opening tag for an HTML form with file upload support.
  *
  * @param string $location The URL to which the form will be submitted.
- * @param array $attributes An optional array of HTML attributes for the form.
+ * @param array<mixed> $attributes An optional array of HTML attributes for the form.
  *
  * @return string The HTML opening tag for the form with enctype set to "multipart/form-data."
  */
@@ -257,11 +257,11 @@ function form_close(): string
 /**
  * Get a string representation of HTML attributes from an associative array.
  *
- * @param array|null $attributes An associative array of HTML attributes.
+ * @param array<mixed>|null $attributes An associative array of HTML attributes.
  *
  * @return string A string representation of HTML attributes.
  */
-function get_attributes_str($attributes): string
+function get_attributes_str(?array $attributes): string
 {
     if (!is_array($attributes) || empty($attributes)) {
         return '';
@@ -291,7 +291,7 @@ function get_attributes_str($attributes): string
  * Generate an HTML label element.
  *
  * @param string $label_text The text or HTML to be used as the label content.
- * @param array $attributes An associative array of HTML attributes for the label element. Defaults to empty array.
+ * @param array<mixed> $attributes An associative array of HTML attributes for the label element. Defaults to empty array.
  *
  * @return string The generated HTML label element with attributes.
  *
@@ -310,7 +310,7 @@ function form_label(string $label_text, array $attributes = []): string
  *
  * @param string $name The name attribute for the textarea element.
  * @param string|null $value The initial value of the textarea. If not provided, it will be empty.
- * @param array $attributes An associative array of HTML attributes for the textarea.
+ * @param array<mixed> $attributes An associative array of HTML attributes for the textarea.
  *
  * @return string The generated HTML textarea element.
  */
@@ -326,7 +326,7 @@ function form_textarea(string $name, ?string $value = null, array $attributes = 
  *
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value attribute for the input element. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -340,7 +340,7 @@ function form_date(string $name, ?string $value = null, array $attributes = []):
  *
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value attribute for the input element in YYYY-MM-DDTHH:MM format. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -354,7 +354,7 @@ function form_datetime_local(string $name, ?string $value = null, array $attribu
  *
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value attribute for the input element in HH:MM or HH:MM:SS format. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -368,7 +368,7 @@ function form_time(string $name, ?string $value = null, array $attributes = []):
  *
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value attribute for the input element in YYYY-MM format. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -382,7 +382,7 @@ function form_month(string $name, ?string $value = null, array $attributes = [])
  *
  * @param string $name The name attribute for the input element.
  * @param string|null $value The value attribute for the input element in YYYY-W## format. Default is null.
- * @param array $attributes Additional attributes for the input element as an associative array. Default is empty array.
+ * @param array<mixed> $attributes Additional attributes for the input element as an associative array. Default is empty array.
  *
  * @return string The generated HTML input element.
  */
@@ -396,7 +396,7 @@ function form_week(string $name, ?string $value = null, array $attributes = []):
  *
  * @param string $name The name attribute for the button element.
  * @param string|null $value The value of the button. If not provided, defaults to "Submit".
- * @param array $attributes An associative array of HTML attributes for the button.
+ * @param array<mixed> $attributes An associative array of HTML attributes for the button.
  *
  * @return string The generated HTML submit button element.
  *
@@ -419,7 +419,7 @@ function form_submit(string $name, ?string $value = null, array $attributes = []
  *
  * @param string $name The name attribute for the button element.
  * @param string|null $value The value of the button. If not provided, defaults to "Submit".
- * @param array $attributes An associative array of HTML attributes for the button.
+ * @param array<mixed> $attributes An associative array of HTML attributes for the button.
  *
  * @return string The generated HTML button element.
  *
@@ -441,7 +441,7 @@ function form_button(string $name, ?string $value = null, array $attributes = []
  * @param string $name The name attribute for the select element.
  * @param array<string|int,string> $options Associative array of options where keys are values and values are display text.
  * @param string|int|null $selected_key The key of the selected option. Can be string or integer.
- * @param array $attributes An array of HTML attributes for the select element.
+ * @param array<mixed> $attributes An array of HTML attributes for the select element.
  *
  * @return string The generated HTML select menu.
  *
@@ -469,7 +469,7 @@ function form_dropdown(string $name, array $options, string|int|null $selected_k
  * Generate an HTML file input element.
  *
  * @param string $name The name attribute for the file input.
- * @param array $attributes An array of HTML attributes for the file input.
+ * @param array<mixed> $attributes An array of HTML attributes for the file input.
  *
  * @return string The generated HTML for the file input element.
  */
@@ -645,7 +645,7 @@ function validation_errors(string|int|null $first_arg = null, ?string $closing_h
 /**
  * Generates JSON-formatted validation errors and sends an HTTP response.
  *
- * @param  array  $errors  The validation errors.
+ * @param  array<mixed>  $errors  The validation errors.
  * @param  int  $status_code  The HTTP status code to send.
  *
  * @throws JsonException
@@ -668,7 +668,7 @@ function json_validation_errors(array $errors, int $status_code): never
 /**
  * Generates inline validation errors for a specific field.
  *
- * @param array $errors The validation errors.
+ * @param array<mixed> $errors The validation errors.
  * @param string $field The field to display errors for.
  *
  * @return string The formatted inline validation errors.
@@ -690,7 +690,7 @@ function inline_validation_errors(array $errors, string $field): string
 /**
  * Generates general validation errors.
  *
- * @param array $errors The validation errors.
+ * @param array<mixed> $errors The validation errors.
  * @param string|null $opening_html HTML to open each error message.
  * @param string|null $closing_html HTML to close each error message.
  *

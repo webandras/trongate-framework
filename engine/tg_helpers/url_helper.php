@@ -140,7 +140,7 @@ function previous_url(): string
  *
  * @param string $url The destination URL. Can be relative or absolute.
  * @param string|null $text The visible link text. If null, the URL is used.
- * @param array $attributes Associative array of HTML attributes (e.g., ['class' => 'btn']).
+ * @param array<mixed> $attributes Associative array of HTML attributes (e.g., ['class' => 'btn']).
  *
  * @return string The generated HTML anchor tag.
  */
