@@ -24,21 +24,6 @@ final class Templates extends Trongate
     }
 
     /**
-     * Display admin theme template with provided data.
-     *
-     * @param  array<mixed>  $data  The data to pass to the template view
-     *
-     * @throws Exception
-     */
-    public function admin(array $data): void
-    {
-        $data['theme'] = (isset($data['theme'])) ? $data['theme'] : 'default';
-        $data['additional_includes_top'] = $this->build_additional_includes($data['additional_includes_top'] ?? []);
-        $data['additional_includes_btm'] = $this->build_additional_includes($data['additional_includes_btm'] ?? []);
-        $this->display('admin', $data);
-    }
-
-    /**
      * Display public theme template with provided data.
      * Loads the public template with optional theme variation support.
      *
