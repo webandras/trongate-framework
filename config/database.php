@@ -8,6 +8,9 @@ $databases = [
         'port' => '3306',
         'user' => 'root',
         'password' => '',
-        'database' => 'trongate',
+        'database' => 'laravel_clean_ui',
+        'charset' => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix' => '',
     ],
 ];
