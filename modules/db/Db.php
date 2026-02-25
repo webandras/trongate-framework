@@ -31,9 +31,9 @@ final class Db extends Trongate
 
     public Capsule $capsule;
 
-	private string $collation;
+    private string $collation;
 
-	/**
+    /**
      * Initialize database connection
      *
      * Establishes a PDO connection to the MySQL database using configuration from
@@ -94,8 +94,8 @@ final class Db extends Trongate
         $this->pass = $config['password'];
         $this->dbname = $config['database'];
         $this->charset = $config['charset'] ?? 'utf8';
-		$this->collation = $config['collation'] ?? 'utf8_unicode_ci';
-		$this->prefix = $config['prefix'] ?? '';
+        $this->collation = $config['collation'] ?? 'utf8_unicode_ci';
+        $this->prefix = $config['prefix'] ?? '';
 
         // If database name is empty, return without connecting
         if ($this->dbname === '') {

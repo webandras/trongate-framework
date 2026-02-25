@@ -11,10 +11,11 @@ declare(strict_types=1);
  */
 final class Welcome extends Trongate
 {
-	/**
-	 * Renders the (default) homepage for public access.
-	 * @throws Exception
-	 */
+    /**
+     * Renders the (default) homepage for public access.
+     *
+     * @throws Exception
+     */
     public function index(): void
     {
         $data = [
