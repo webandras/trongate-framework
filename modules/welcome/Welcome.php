@@ -23,14 +23,6 @@ final class Welcome extends Trongate
             'view_file' => 'default_homepage',
         ];
 
-        !d(
-            $this->db->capsule
-                ->table('workers')
-                ->select(['name', 'email'])
-                ->where('name', 'Liliana Von')
-                ->get()
-        );
-
         $this->templates->public($data);
     }
 }
