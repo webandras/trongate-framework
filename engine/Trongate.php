@@ -10,10 +10,18 @@ declare(strict_types=1);
  */
 class Trongate
 {
-    // Instance cache for lazy loading
+	/**
+	 * Instance cache for lazy loading
+	 *
+	 * @var array<mixed>
+	 */
     private array $instances = [];
 
-    // Loaded modules cache
+	/**
+	 * Loaded modules cache
+	 *
+	 * @var array<mixed>
+	 */
     private array $loaded_modules = [];
 
     // Core properties
@@ -131,7 +139,7 @@ class Trongate
      *
      * @param string $target_module The target module name.
      *
-     * @return array An array containing 'path' and 'class' keys.
+     * @return array<mixed> An array containing 'path' and 'class' keys.
      *
      * @throws Exception If the controller cannot be found.
      */
@@ -209,16 +217,19 @@ class Trongate
 
         // Priority 1: Child module path (if parent/child modules are set)
         if ($this->parent_module !== '' && $this->child_module !== '') {
+	        // @phpstan-ignore-next-line
             $possible_paths[] = APPPATH . "modules/$this->parent_module/$this->child_module/views/$view.php";
         }
 
         // Priority 2: Standard module path
+	    // @phpstan-ignore-next-line
         $possible_paths[] = APPPATH . "modules/$module_name/views/$view.php";
 
         // Priority 3: Derive module name from URL segment (for parent-child modules)
         $segment_one = segment(1);
         if ( str_contains( $segment_one, '-' ) && substr_count($segment_one, '-') === 1) {
             $module_name_from_segment = str_replace('-', '/', $segment_one);
+	        // @phpstan-ignore-next-line
             $possible_paths[] = APPPATH . "modules/$module_name_from_segment/views/$view.php";
         }
 
@@ -240,10 +251,11 @@ class Trongate
      *
      * @param string $path The path to the directory containing the manifest file.
      *
-     * @return array|false The manifest data as an associative array, or false if not found.
+     * @return array<mixed>|false The manifest data as an associative array, or false if not found.
      */
     protected function read_manifest(string $path): array|false
     {
+	    // @phpstan-ignore-next-line
         $manifest_file = APPPATH . $path . '/manifest.php';
 
         if (!file_exists($manifest_file)) {

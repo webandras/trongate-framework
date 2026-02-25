@@ -43,7 +43,7 @@ spl_autoload_register(function (string $class_name) {
 /**
  * Retrieves the URL segments after processing custom routes.
  *
- * @return array Returns an associative array with 'assumed_url' and 'segments'.
+ * @return array<mixed> Returns an associative array with 'assumed_url' and 'segments'.
  */
 function get_segments(): array
 {

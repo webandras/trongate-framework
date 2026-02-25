@@ -88,6 +88,7 @@ function display(array $data): void
     }
 
     // Build path to content view
+    // @phpstan-ignore-next-line
     $content_view_path = APPPATH . "modules/{$data['view_module']}/views/{$data['view_file']}.php";
 
     // Check if view exists
@@ -110,7 +111,7 @@ function display(array $data): void
  *
  * @param string $file_string The file path from which to extract information.
  *
- * @return array An associative array containing the 'file_name' and 'file_extension'.
+ * @return array<mixed> An associative array containing the 'file_name' and 'file_extension'.
  */
 function return_file_info(string $file_string): array
 {
@@ -130,7 +131,7 @@ function return_file_info(string $file_string): array
  * @param string $property The property by which to sort the array.
  * @param string $direction The direction to sort ('asc' for ascending, 'desc' for descending). Default is 'asc'.
  *
- * @return array The sorted array.
+ * @return array<mixed> The sorted array.
  */
 function sort_by_property(array &$array, string $property, string $direction = 'asc'): array
 {
@@ -151,7 +152,7 @@ function sort_by_property(array &$array, string $property, string $direction = '
  * @param string $property The property by which to sort the objects.
  * @param string $direction (Optional) The direction of sorting ('asc' or 'desc'). Defaults to 'asc'.
  *
- * @return array The sorted array of objects.
+ * @return array<mixed> The sorted array of objects.
  */
 function sort_rows_by_property(array $array, string $property, string $direction = 'asc'): array
 {

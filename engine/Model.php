@@ -13,13 +13,23 @@ declare(strict_types=1);
  */
 class Model
 {
-    // Cache for loaded model instances
+	/**
+	 * Cache for loaded model instances
+	 * @var array<mixed>
+	 */
     private array $loaded_models = [];
 
-    // Cache for Db instances (default and alternative database groups)
+	/**
+	 * Cache for Db instances (default and alternative database groups)
+	 * @var array<mixed>
+	 */
     private array $db_instances = [];
 
-    // Cache for loaded module instances
+	/**
+	 * Cache for loaded module instances
+	 *
+	 * @var array<mixed>
+	 */
     private array $loaded_modules = [];
 
     // The module that instantiated this Model instance
@@ -64,14 +74,12 @@ class Model
 
         // Handle primary database (always accessible)
         if ($key === 'db') {
-			// @phpstan-ignore-next-line
             return $this->db_instances[$key] = new Db($this->current_module);
         }
 
         // Handle alternative database groups
         // Check if this key corresponds to a configured database group
         if ($this->is_database_group($key)) {
-	        // @phpstan-ignore-next-line
             return $this->db_instances[$key] = new Db($this->current_module, $key);
         }
 
@@ -153,7 +161,7 @@ class Model
      *
      * @param string $target_module The target module name.
      *
-     * @return array An array containing 'path' and 'class' keys.
+     * @return array<mixed> An array containing 'path' and 'class' keys.
      *
      * @throws Exception If the controller cannot be found.
      */

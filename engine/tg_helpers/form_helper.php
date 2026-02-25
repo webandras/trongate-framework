@@ -241,6 +241,7 @@ function form_close(): string
         $html .= '<script>window.trongateValidationErrors = ' . $errors_json . ';</script>';
 
         // Inject the validation JavaScript
+        // @phpstan-ignore-next-line
         $js_code = file_get_contents(APPPATH . 'engine/tg_helpers/injectables/js/highlight_validation_errors.js');
         // @phpstan-ignore-next-line
         $js_code = str_replace('{{BASE_URL}}', BASE_URL, $js_code);
@@ -490,6 +491,8 @@ function form_file_select(string $name, array $attributes = []): string
  * @param string|bool|null $field_name   Key to fetch, or null/true for all data
  * @param bool             $clean_up     Trim and collapse whitespace
  * @param bool             $cast_numeric Allow numeric strings to become int|float
+ *
+ * @return string|int|float|array<mixed>
  *
  * @throws Exception If JSON input is malformed
  */

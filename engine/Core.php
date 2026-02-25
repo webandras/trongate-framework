@@ -198,8 +198,11 @@ final class Core
         $dir_path = str_replace($ditch, '', $controller_path);
 
         $files = [];
-        foreach (glob($dir_path . '*.sql') as $file) {
-            $files[] = $file;
+        $path_names = glob($dir_path . '*.sql');
+        if ($path_names !== false) {
+            foreach ($path_names as $file) {
+                $files[] = $file;
+            }
         }
 
         if (count($files) > 0) {
