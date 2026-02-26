@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Database abstraction class for handling database operations using PDO.
@@ -25,13 +27,11 @@ final class Db extends Trongate
 
     private string $charset;
 
-    private string $prefix;
-
     private bool $is_dev_mode;
 
-    public Capsule $capsule;
+    public Connection $conn;
 
-    private string $collation;
+	public QueryBuilder $query;
 
     /**
      * Initialize database connection
@@ -94,8 +94,6 @@ final class Db extends Trongate
         $this->pass = $config['password'];
         $this->dbname = $config['database'];
         $this->charset = $config['charset'] ?? 'utf8';
-        $this->collation = $config['collation'] ?? 'utf8_unicode_ci';
-        $this->prefix = $config['prefix'] ?? '';
 
         // If database name is empty, return without connecting
         if ($this->dbname === '') {
@@ -103,21 +101,17 @@ final class Db extends Trongate
         }
 
         try {
-            $this->capsule = new Capsule;
+	        $this->conn = DriverManager::getConnection([
+		        'driver' => 'pdo_mysql',
+		        'host' => $this->host,
+		        'port' => $this->port,
+		        'dbname' => $this->dbname,
+		        'user' => $this->user,
+		        'password' => $this->pass,
+		        'charset' => $this->charset,
+	        ]);
 
-            $this->capsule->addConnection([
-                'driver' => 'mysql',
-                'host' => $this->host,
-                'port' => $this->port,
-                'database' => $this->dbname,
-                'username' => $this->user,
-                'password' => $this->pass,
-                'charset' => $this->charset,
-                'collation' => $this->collation,
-                'prefix' => $this->prefix,
-            ]);
-
-            $this->capsule->setAsGlobal();
+	        $this->query = $this->conn->createQueryBuilder();
 
         } catch (PDOException $e) {
             if ($this->is_dev_mode) {
