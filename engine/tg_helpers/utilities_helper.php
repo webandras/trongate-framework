@@ -127,7 +127,7 @@ function return_file_info(string $file_string): array
 /**
  * Sorts an array of associative arrays by a specified property.
  *
- * @param array $array The array to be sorted.
+ * @param array<mixed> $array The array to be sorted.
  * @param string $property The property by which to sort the array.
  * @param string $direction The direction to sort ('asc' for ascending, 'desc' for descending). Default is 'asc'.
  *
@@ -148,7 +148,7 @@ function sort_by_property(array &$array, string $property, string $direction = '
 /**
  * Sorts an array of objects by a specified property.
  *
- * @param array $array The array of objects to be sorted.
+ * @param array<mixed> $array The array of objects to be sorted.
  * @param string $property The property by which to sort the objects.
  * @param string $direction (Optional) The direction of sorting ('asc' or 'desc'). Defaults to 'asc'.
  *

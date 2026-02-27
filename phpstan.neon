@@ -1,6 +1,8 @@
 includes:
 
 parameters:
+    phpVersion: 80300
+
     paths:
         - config/
         - engine/
@@ -11,9 +13,6 @@ parameters:
 
     ignoreErrors:
         - '#(mixed)#'
-        - '#Function sort_by_property\(\) has parameter \$array with no value type specified in iterable type array.#'
-        - '#Function sort_rows_by_property\(\) has parameter \$array with no value type specified in iterable type array.#'
-        - '#Method Templates::build_additional_includes\(\) has parameter \$files with no value type specified in iterable type array.#'
 
     excludePaths:
         - modules/*/views/*

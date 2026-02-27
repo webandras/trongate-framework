@@ -17,7 +17,7 @@ final class Db extends Trongate
 {
     private string $host;
 
-    private string $port;
+    private int $port;
 
     private string $user;
 
@@ -31,7 +31,7 @@ final class Db extends Trongate
 
     public Connection $conn;
 
-	public QueryBuilder $query;
+    public QueryBuilder $query;
 
     /**
      * Initialize database connection
@@ -86,10 +86,11 @@ final class Db extends Trongate
             throw new Exception('Configuration error.');
         }
 
+        /** @var array{host:string, port:int|null, user:string, password:string, database:string, charset:string|null} $config */
         $config = $GLOBALS['databases'][$db_group];
 
         $this->host = $config['host'];
-        $this->port = $config['port'] ?? '3306';
+        $this->port = $config['port'] ?? 3306;
         $this->user = $config['user'];
         $this->pass = $config['password'];
         $this->dbname = $config['database'];
@@ -101,17 +102,17 @@ final class Db extends Trongate
         }
 
         try {
-	        $this->conn = DriverManager::getConnection([
-		        'driver' => 'pdo_mysql',
-		        'host' => $this->host,
-		        'port' => $this->port,
-		        'dbname' => $this->dbname,
-		        'user' => $this->user,
-		        'password' => $this->pass,
-		        'charset' => $this->charset,
-	        ]);
+            $this->conn = DriverManager::getConnection([
+                'driver' => 'pdo_mysql',
+                'host' => $this->host,
+                'port' => $this->port,
+                'dbname' => $this->dbname,
+                'user' => $this->user,
+                'password' => $this->pass,
+                'charset' => $this->charset,
+            ]);
 
-	        $this->query = $this->conn->createQueryBuilder();
+            $this->query = $this->conn->createQueryBuilder();
 
         } catch (PDOException $e) {
             if ($this->is_dev_mode) {

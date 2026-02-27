@@ -69,7 +69,7 @@ final class Templates extends Trongate
     /**
      * Builds HTML code for additional includes based on file types.
      *
-     * @param array $files Array of file names.
+     * @param  array<string>|string|null  $files  Array of file names.
      *
      * @return string HTML code for additional includes.
      */
