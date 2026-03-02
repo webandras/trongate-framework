@@ -107,6 +107,34 @@ function display(array $data): void
 }
 
 /**
+ * Display content partial view within a template
+ *
+ * @param array<mixed>|null $data
+ */
+function partial(string $file_name, ?array $data = null): void {
+	// Build path to the partial view
+    // @phpstan-ignore-next-line
+	$content_partial_view_path = APPPATH . 'modules/templates/views/' . $file_name . '.php';
+
+	// Check if partial view exists
+	if (!file_exists($content_partial_view_path)) {
+		echo "<div style='color: red; padding: 1rem; border: 2px solid red;'>";
+		echo '<h2>Partial View Not Found</h2>';
+		echo "<p>Looking for: <code>$content_partial_view_path</code></p>";
+		echo '</div>';
+
+		return;
+	}
+
+	// Extract data and include view
+	if (isset($data)) {
+		extract($data);
+	}
+
+	require $content_partial_view_path;
+}
+
+/**
  * Extract file name and extension from a given file path.
  *
  * @param string $file_string The file path from which to extract information.
