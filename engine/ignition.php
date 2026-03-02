@@ -125,6 +125,7 @@ require_once __DIR__ . '/tg_helpers/form_helper.php';
 require_once __DIR__ . '/tg_helpers/string_helper.php';
 require_once __DIR__ . '/tg_helpers/url_helper.php';
 require_once __DIR__ . '/tg_helpers/utilities_helper.php';
+require_once __DIR__ . '/tg_helpers/custom_helper.php';
 
 /* --------------------------------------------------------------
  * Interceptor execution (early hooks)

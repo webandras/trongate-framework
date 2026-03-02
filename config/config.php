@@ -9,3 +9,9 @@ define('DEFAULT_MODULE', 'welcome');
 define('DEFAULT_METHOD', 'index');
 define('MODULE_ASSETS_TRIGGER', '_module');
 define('ERROR_404', 'templates/error_404');
+
+define('DEFAULT_LANGUAGE', 'en');
+define('LANGUAGES', array(
+	'English' => 'en',
+	'Magyar' => 'hu',
+));
