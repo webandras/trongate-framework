@@ -86,15 +86,15 @@ final class Db extends Trongate
             throw new Exception('Configuration error.');
         }
 
-        /** @var array{host:string, port:int|null, user:string, password:string, database:string, charset:string|null} $config */
+        /** @var array{host:string, port:int, user:string, password:string, database:string, charset:string} $config */
         $config = $GLOBALS['databases'][$db_group];
 
         $this->host = $config['host'];
-        $this->port = $config['port'] ?? 3306;
+        $this->port = (int) $config['port'];
         $this->user = $config['user'];
         $this->pass = $config['password'];
         $this->dbname = $config['database'];
-        $this->charset = $config['charset'] ?? 'utf8';
+        $this->charset = $config['charset'];
 
         // If database name is empty, return without connecting
         if ($this->dbname === '') {
